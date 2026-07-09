@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+
+# Build output
+dist/
+*.tar.gz
+
+# Local disk storage / caches — regenerable or user-uploaded binary content,
+# not source code. See README.md "Base de données" / storage-local.ts.
+.img-cache/
+server/uploads/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# One-off scripts / data (contain keys or large data — keep out of repo)
+scratch/
+import_products.mjs
+test_import.mjs
+import_errors.json
+rapport-produits.csv
+*.xlsx
+
+# Editor / OS
+.DS_Store
+vite.config.ts.*

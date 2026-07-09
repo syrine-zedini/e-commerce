@@ -1,0 +1,576 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===================================================================
+   YJ PARA — Premium Design System
+   Clean & Premium aesthetic inspired by luxury cosmetics & pharmacy
+   =================================================================== */
+
+@layer base {
+  :root {
+    /* ─── YJ PARA Brand Palette ─── */
+    --yj-blue: 209 80% 51%;        /* #1D8EE6 */
+    --yj-blue-light: 209 90% 96%;  /* soft blue tint */
+    --yj-blue-deep: 222 47% 11%;   /* #1E293B deep navy */
+    --yj-gold: 40 70% 56%;         /* subtle gold accent */
+    
+    /* ─── App-level custom vars ─── */
+    --accent-soft-lavender: 204 100% 94%;  /* #E0F2FE Sky 100 */
+    --accent-soft-teal: 210 20% 96%;       /* #F1F5F9 Slate 100 */
+    --app-primary: 209 80% 51%;            /* #1D8EE6 Elegant Blue */
+    --app-secondary: 222 47% 11%;          /* #0F172A Slate 900 */
+    --card-background: 0 0% 100%;          /* white */
+    --error: 0 84% 60%;                    /* red-500 */
+    --light-background: 210 40% 98%;       /* #F8FAFC Slate 50 */
+    --text-dark: 215 25% 17%;             /* #1E293B blueish anthracite */
+    --text-light: 0 0% 100%;              /* white */
+
+    /* ─── ShadCN / Radix Design Tokens ─── */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --primary: 209 80% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --ring: 209 80% 51%;
+
+    --radius: 0.75rem;
+
+    /* ─── Premium Shadows ─── */
+    --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.05), 0 2px 6px -4px rgba(0, 0, 0, 0.03);
+    --shadow-card: 0 4px 20px -5px rgba(0, 0, 0, 0.06), 0 2px 8px -4px rgba(0, 0, 0, 0.04);
+    --shadow-elevated: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 4px 16px -8px rgba(0, 0, 0, 0.06);
+    --shadow-blue: 0 4px 20px -5px rgba(29, 142, 230, 0.2);
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215 16% 57%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20% 65%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --card: 224 71% 6%;
+    --card-foreground: 213 31% 91%;
+
+    --primary: 209 80% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 47% 11%;
+    --secondary-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Poppins', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Elegant headings with optional serif flair */
+  h1, h2, h3 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .all-\[unset\] {
+    all: unset;
+  }
+
+  /* ─── Premium Card ─── */
+  .card-premium {
+    background: white;
+    border: 1px solid hsl(214 32% 91% / 0.6);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .card-premium:hover {
+    box-shadow: var(--shadow-card);
+    border-color: hsl(209 80% 51% / 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* ─── Glassmorphism ─── */
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* ─── Premium Buttons ─── */
+  .btn-primary {
+    background: hsl(209 80% 51%);
+    color: white;
+    border-radius: 9999px;
+    padding: 0.625rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 10px -3px rgba(29, 142, 230, 0.3);
+  }
+  .btn-primary:hover {
+    background: hsl(209 80% 45%);
+    box-shadow: 0 6px 20px -5px rgba(29, 142, 230, 0.4);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px -3px rgba(29, 142, 230, 0.3);
+  }
+
+  /* ─── Search Input ─── */
+  .search-premium {
+    background: hsl(210 40% 96.1%);
+    border: 1.5px solid transparent;
+    border-radius: 9999px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+  }
+  .search-premium:focus {
+    background: white;
+    border-color: hsl(209 80% 51% / 0.3);
+    box-shadow: 0 0 0 4px hsl(209 80% 51% / 0.08);
+    outline: none;
+  }
+  .search-premium::placeholder {
+    color: hsl(215 16% 57%);
+    font-weight: 400;
+  }
+
+  /* ─── Modal Overlay ─── */
+  .modal-overlay {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .modal-content {
+    background: white;
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-elevated);
+    animation: modal-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ─── Premium Footer ─── */
+  .footer-premium {
+    background: linear-gradient(180deg, #0F172A 0%, #0A1120 100%);
+  }
+}
+
+@layer utilities {
+  /* Scrollbar hide */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+}
+
+/* ===================================================================
+   Animations
+   =================================================================== */
+
+:root {
+  --animate-spin: spin 1s linear infinite;
+}
+
+/* ─── Fade animations ─── */
+.animate-fade-in {
+  animation: fade-in 0.8s var(--animation-delay, 0s) ease forwards;
+}
+.animate-fade-up {
+  animation: fade-up 0.8s var(--animation-delay, 0s) ease forwards;
+}
+.animate-fade-down {
+  animation: fade-down 0.6s var(--animation-delay, 0s) ease forwards;
+}
+.animate-scale-in {
+  animation: scale-in 0.4s var(--animation-delay, 0s) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ─── Marquee ─── */
+.animate-marquee {
+  animation: marquee var(--duration) infinite linear;
+}
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration) linear infinite;
+}
+
+/* ─── Shimmer ─── */
+.animate-shimmer {
+  animation: shimmer 8s infinite;
+}
+
+/* ─── Spin ─── */
+.animate-spin {
+  animation: var(--animate-spin);
+}
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+/* ─── Pulse glow ─── */
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ===================================================================
+   Keyframes
+   =================================================================== */
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes modal-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(29, 142, 230, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(29, 142, 230, 0);
+  }
+}
+
+@keyframes image-glow {
+  0% {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.74, 0.25, 0.76, 1);
+  }
+  10% {
+    opacity: 0.7;
+    animation-timing-function: cubic-bezier(0.12, 0.01, 0.08, 0.99);
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  90%,
+  to {
+    background-position: calc(-100% - var(--shimmer-width)) 0;
+  }
+  30%,
+  60% {
+    background-position: calc(100% + var(--shimmer-width)) 0;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-vertical {
+  0% {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slide-out-left {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* ===================================================================
+   Swiper Overrides (YJ PARA brand blue)
+   =================================================================== */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #1D8EE6;
+  width: 44px;
+  height: 44px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: #1D8EE6;
+  color: white;
+  box-shadow: 0 4px 16px -4px rgba(29, 142, 230, 0.35);
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ===================================================================
+   Custom app-level color utility bridges for Tailwind
+   (so existing bg-app-primary, text-app-primary etc. keep working)
+   =================================================================== */
+
+/* Custom Announcement Bar Keyframes & Animations */
+@keyframes text-glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 2px rgba(29, 142, 230, 0.15);
+    opacity: 0.92;
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(29, 142, 230, 0.5);
+    opacity: 1;
+  }
+}
+
+.animate-glow-pulse {
+  animation: text-glow-pulse 2s infinite ease-in-out;
+}
+
+@keyframes bar-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-bar-shimmer {
+  animation: bar-shimmer 4s infinite linear;
+}
+
+/* ─── Lazy image fade-in ─── */
+@keyframes img-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+img[loading="lazy"] {
+  animation: img-fade-in 0.35s ease-in-out both;
+}
+
+/* ─── Shimmer skeleton helper class (opt-in) ─── */
+@keyframes img-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.img-skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: img-shimmer 1.4s ease-in-out infinite;
+}
+
+/* ─── Custom Banner Animations ─── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(4deg); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-4deg); }
+}
+
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}
+
+@keyframes bounce-horizontal {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 6s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float-fast 4s ease-in-out infinite;
+}
+
+.animate-bounce-horizontal {
+  animation: bounce-horizontal 1.5s ease-in-out infinite;
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 12s ease-in-out infinite;
+}
+
+.clip-octagon {
+  clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+}
+
+.clip-octagon img {
+  transform: scale(1.28) !important;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.group:hover .clip-octagon img,
+.group\/item:hover .clip-octagon img {
+  transform: scale(1.38) !important;
+}
+
+/* Hide spin-buttons for input type number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+
+
