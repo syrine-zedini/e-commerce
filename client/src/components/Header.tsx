@@ -246,7 +246,7 @@ export default function Header({
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-800 line-clamp-1">{product.name}</p>
                             <p className="text-sm font-bold text-[#1D8EE6] mt-0.5">
-                              {(product.discounted_price && product.discounted_price > 0 ? product.discounted_price : product.original_price)?.toFixed(3)} DT
+                              {Number(product.discounted_price && product.discounted_price > 0 ? product.discounted_price : product.original_price).toFixed(3)} DT
                             </p>
                           </div>
                         </li>
