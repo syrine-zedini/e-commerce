@@ -8,8 +8,7 @@ dist/
 # Local disk storage / caches — regenerable or user-uploaded binary content,
 # not source code. See README.md "Base de données" / storage-local.ts.
 .img-cache/
-server/uploads/
-
+# server/uploads/
 # Environment & secrets
 .env
 .env.*
