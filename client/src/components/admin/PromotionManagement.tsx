@@ -155,7 +155,7 @@ export const PromotionManagement: React.FC = () => {
     setEditingPromotion(promotion);
     setFormData({
       name: promotion.name,
-      type: promotion.type,
+      type: 'percentage',
       value: promotion.value.toString(),
       startDate: promotion.start_date,
       endDate: promotion.end_date,
@@ -278,14 +278,9 @@ export const PromotionManagement: React.FC = () => {
 
               <div>
                 <label className="block font-medium mb-1">Type</label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value as 'percentage' | 'fixed' })}
-                  className="w-full border rounded px-3 py-2"
-                >
-                  <option value="percentage">Pourcentage (%)</option>
-                  <option value="fixed">Montant fixe (DT)</option>
-                </select>
+                <div className="w-full border rounded px-3 py-2 bg-gray-50 text-gray-700 select-none">
+                  Pourcentage (%)
+                </div>
               </div>
 
               <div>
