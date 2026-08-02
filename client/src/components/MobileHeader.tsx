@@ -335,7 +335,6 @@ useEffect(() => {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => { if (filtered.length > 0) setShowModal(true); }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && query.trim()) {
                 setQuery("");
@@ -345,14 +344,9 @@ useEffect(() => {
               }
             }}
             className="search-premium w-full h-12"
-            style={{ paddingRight: query.trim().length > 0 ? "70px" : "40px" }}
+            style={{ paddingRight: "40px" }}
             placeholder="Rechercher un produit..."
           />
-          {query.trim().length > 0 && (
-            <span className="absolute right-11 top-1/2 transform -translate-y-1/2 text-xs font-bold text-[#1D8EE6] bg-[#EBF5FC] px-2.5 py-0.5 rounded-full pointer-events-none">
-              {filtered.length}
-            </span>
-          )}
           <button
             type="button"
             onMouseDown={(e) => {
@@ -369,46 +363,6 @@ useEffect(() => {
           >
             <img className="w-4 h-4 opacity-60" alt="Search icon" src="/figmaAssets/vector.png" />
           </button>
-
-          {/* Search results dropdown */}
-          {showModal && (
-            <div className="absolute left-0 top-14 w-full bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] border border-slate-100 z-[999] max-h-[60vh] overflow-y-auto">
-              {filtered.length === 0 ? (
-                <div className="px-5 py-8 text-center">
-                  <p className="text-slate-400 text-sm">Aucun produit trouvé pour <span className="font-semibold text-slate-600">"{query}"</span></p>
-                </div>
-              ) : (
-                <ul className="py-2">
-                  {filtered.map((product) => (
-                    <li
-                      key={product.id}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors border-b border-slate-50 last:border-0"
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setQuery("");
-                        setShowModal(false);
-                        setLocation(`/detailsprod/${product.id}`);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                    >
-                      <img
-                        src={convertImageUrl(product.image_path) || "/placeholder.png"}
-                        alt={product.name}
-                        className="w-11 h-11 object-cover rounded-xl flex-shrink-0 border border-slate-100"
-                        onError={onImgError}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-slate-800 line-clamp-2">{product.name}</p>
-                        <p className="text-sm font-bold text-[#1D8EE6] mt-0.5">
-                          {(parseFloat(product.discounted_price) > 0 ? parseFloat(product.discounted_price) : parseFloat(product.original_price) || 0).toFixed(3)} DT
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
