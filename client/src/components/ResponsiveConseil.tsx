@@ -19,29 +19,29 @@ export function ResponsiveConseil() {
   return (
     <>
       <Helmet>
-        <title>Conseils Santé & Bien-être</title>
+        <title>GLOW Store - Conseils Santé &amp; Bien-être</title>
         <meta
           name="description"
-          content="Découvrez nos conseils santé et bien-être sur votre parapharmacie en ligne en Tunisie. Astuces beauté, soins et santé pour toute la famille."
+          content="Découvrez nos conseils santé et bien-être sur GLOW Store en Tunisie. Astuces beauté, soins et santé pour toute la famille."
         />
         <meta
           name="keywords"
-          content="conseils santé, bien-être, beauté, soins, parapharmacie, Tunisie"
+          content="GLOW, conseils santé, bien-être, beauté, soins, parapharmacie, Tunisie"
         />
-        <meta property="og:title" content="Conseils Santé & Bien-être" />
+        <meta property="og:title" content="GLOW Store - Conseils Santé &amp; Bien-être" />
         <meta
           property="og:description"
-          content="Astuces et conseils santé, beauté et bien-être – votre parapharmacie en ligne."
+          content="Astuces et conseils santé, beauté et bien-être – GLOW Store."
         />
-        <meta property="og:image" content="/figmaAssets/productsm/flor-a-logos-01-180.png" />
+        <meta property="og:image" content="/figmaAssets/brand/glow-store-logo.jpeg" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Conseils Santé & Bien-être" />
+        <meta name="twitter:title" content="GLOW Store - Conseils Santé &amp; Bien-être" />
         <meta
           name="twitter:description"
-          content="Votre parapharmacie en ligne en Tunisie. Conseils santé, beauté et bien-être."
+          content="GLOW Store en Tunisie. Conseils santé, beauté et bien-être."
         />
-        <meta name="twitter:image" content="/figmaAssets/productsm/flor-a-logos-01-180.png" />
+        <meta name="twitter:image" content="/figmaAssets/brand/glow-store-logo.jpeg" />
       </Helmet>
 
       {isMobile ? <ConseilsSantMobile /> : <ConseilsSant />}

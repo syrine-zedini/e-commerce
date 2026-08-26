@@ -19,29 +19,29 @@ export function ResponsiveMarques() {
   return (
     <>
       <Helmet>
-        <title>Nos Marques</title>
+        <title>GLOW Store - Nos Marques</title>
         <meta
           name="description"
-          content="Découvrez les marques disponibles sur votre parapharmacie en ligne en Tunisie. Produits de santé, beauté et bien-être de qualité."
+          content="Découvrez les marques disponibles sur GLOW Store en Tunisie. Produits de santé, beauté et bien-être de qualité."
         />
         <meta
           name="keywords"
-          content="marques, parapharmacie, santé, beauté, soins, bien-être, Tunisie"
+          content="GLOW, marques, parapharmacie, santé, beauté, soins, bien-être, Tunisie"
         />
-        <meta property="og:title" content="Nos Marques" />
+        <meta property="og:title" content="GLOW Store - Nos Marques" />
         <meta
           property="og:description"
-          content="Explorez nos marques sur votre parapharmacie en ligne, pour tous vos besoins en santé, beauté et bien-être."
+          content="Explorez nos marques sur GLOW Store, pour tous vos besoins en santé, beauté et bien-être."
         />
-        <meta property="og:image" content="/figmaAssets/productsm/flor-a-logos-01-180.png" />
+        <meta property="og:image" content="/figmaAssets/brand/glow-store-logo.jpeg" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Nos Marques" />
+        <meta name="twitter:title" content="GLOW Store - Nos Marques" />
         <meta
           name="twitter:description"
-          content="Votre parapharmacie en ligne en Tunisie. Découvrez toutes nos marques et produits."
+          content="GLOW Store en Tunisie. Découvrez toutes nos marques et produits."
         />
-        <meta name="twitter:image" content="/figmaAssets/productsm/flor-a-logos-01-180.png" />
+        <meta name="twitter:image" content="/figmaAssets/brand/glow-store-logo.jpeg" />
       </Helmet>
 
       {isMobile ? <MarquesMobile /> : <Marques />}
