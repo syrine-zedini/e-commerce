@@ -55,10 +55,11 @@ const saveCategory = useMutation({
   },
   onSuccess: (newCategory) => {
     queryClient.setQueryData(['categories'], (old: any) => {
+      const safeOld = Array.isArray(old) ? old : [];
       if (editingCategory) {
-        return old.map((c: Category) => (c.id === newCategory.id ? newCategory : c));
+        return safeOld.map((c: Category) => (c.id === newCategory.id ? newCategory : c));
       } else {
-        return [newCategory, ...old];
+        return [newCategory, ...safeOld];
       }
     });
     toast.success(editingCategory ? 'Catégorie mise à jour !' : 'Catégorie ajoutée !');
