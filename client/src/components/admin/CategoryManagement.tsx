@@ -92,14 +92,18 @@ const deleteCategory = useMutation({
     e.preventDefault();
     if (!formData.name) return;
 
-    let imageUrl = formData.image || '';
-    if (formData.imageFile) imageUrl = await uploadImage(formData.imageFile);
+    try {
+      let imageUrl = formData.image || '';
+      if (formData.imageFile) imageUrl = await uploadImage(formData.imageFile);
 
-    saveCategory.mutate({
-      name: formData.name,
-      description: formData.description,
-      image: imageUrl,
-    });
+      saveCategory.mutate({
+        name: formData.name,
+        description: formData.description,
+        image: imageUrl,
+      });
+    } catch (err: any) {
+      toast.error(`Erreur d'upload : ${err?.message || err}`);
+    }
   };
 
   const resetForm = () => {
