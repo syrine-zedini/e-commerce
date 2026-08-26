@@ -4,7 +4,9 @@ import path from "path";
 // Local disk storage for uploaded images, organized by folder:
 // dismarques/, image/{category}/, conseils/, categories/, produits/.
 // Served statically at /uploads/*.
-const UPLOADS_ROOT = path.resolve(process.cwd(), "server", "uploads");
+const UPLOADS_ROOT = process.env.NODE_ENV === "production"
+  ? "/tmp/uploads"
+  : path.resolve(process.cwd(), "server", "uploads");
 
 function resolveFolder(folder: string) {
   const safe = path.normalize(folder).replace(/^(\.\.[/\\])+/, "");
