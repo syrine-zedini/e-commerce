@@ -125,7 +125,7 @@ export const Wishlist: React.FC = () => {
     <span className="text-lg font-bold text-gray-900">
       {item.product.discounted_price} DT
     </span>
-    <span className="text-sm text-gray-500 line-through decoration-[#1D8EE6]/60 decoration-[1.5px] ml-2">
+    <span className="text-sm text-gray-500 line-through decoration-[#C86D85]/60 decoration-[1.5px] ml-2">
       {item.product.original_price} DT
     </span>
   </>

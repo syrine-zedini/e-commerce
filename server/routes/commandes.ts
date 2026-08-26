@@ -23,8 +23,6 @@ const commandeSelect = {
   total: commandes.total,
   produits: commandes.produits,
   statut: commandes.statut,
-  first_delivery_barcode: commandes.firstDeliveryBarcode,
-  first_delivery_status: commandes.firstDeliveryStatus,
   created_at: commandes.createdAt,
 };
 
@@ -33,7 +31,6 @@ const commandeInputMap: Record<string, string> = {
   province: "province", ville: "ville", code_postal: "codePostal", mot_de_passe: "motDePasse",
   paiement_mode: "paiementMode", frais_livraison: "fraisLivraison", total: "total",
   produits: "produits", statut: "statut",
-  first_delivery_barcode: "firstDeliveryBarcode", first_delivery_status: "firstDeliveryStatus",
 };
 function commandeInputToSet(body: any) {
   return inputToSet(body, commandeInputMap);

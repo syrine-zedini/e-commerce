@@ -19,27 +19,27 @@ export function ResponsiveConseil() {
   return (
     <>
       <Helmet>
-        <title>YJ PARA | Conseils Santé & Bien-être</title>
+        <title>Conseils Santé & Bien-être</title>
         <meta
           name="description"
-          content="Découvrez nos conseils santé et bien-être sur YJ PARA, votre parapharmacie en ligne en Tunisie. Astuces beauté, soins et santé pour toute la famille."
+          content="Découvrez nos conseils santé et bien-être sur votre parapharmacie en ligne en Tunisie. Astuces beauté, soins et santé pour toute la famille."
         />
         <meta
           name="keywords"
           content="conseils santé, bien-être, beauté, soins, parapharmacie, Tunisie"
         />
-        <meta property="og:title" content="YJ PARA | Conseils Santé & Bien-être" />
+        <meta property="og:title" content="Conseils Santé & Bien-être" />
         <meta
           property="og:description"
-          content="Astuces et conseils santé, beauté et bien-être – YJ PARA, votre parapharmacie en ligne."
+          content="Astuces et conseils santé, beauté et bien-être – votre parapharmacie en ligne."
         />
         <meta property="og:image" content="/figmaAssets/productsm/flor-a-logos-01-180.png" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="YJ PARA | Conseils Santé & Bien-être" />
+        <meta name="twitter:title" content="Conseils Santé & Bien-être" />
         <meta
           name="twitter:description"
-          content="YJ PARA, votre parapharmacie en ligne en Tunisie. Conseils santé, beauté et bien-être."
+          content="Votre parapharmacie en ligne en Tunisie. Conseils santé, beauté et bien-être."
         />
         <meta name="twitter:image" content="/figmaAssets/productsm/flor-a-logos-01-180.png" />
       </Helmet>

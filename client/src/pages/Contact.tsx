@@ -1,9 +1,7 @@
 import {
   MailIcon,
-  PhoneIcon,
 } from "lucide-react";
 import React, { useState } from "react";
-import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import Header from "@/components/Header";
 import { MobileHeader } from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
@@ -35,7 +33,7 @@ const headerLinks = HEADER_LINKS;
 
         {/* Hero Section */}
         <section className="w-full h-[200px] relative bg-[url(/figmaAssets/contact/rectangle-230.png)] bg-[100%_100%]">
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(29,142,230,0.85)_0%,rgba(235,245,252,0.4)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(216,138,158,0.85)_0%,rgba(235,245,252,0.4)_100%)]" />
           <div className="relative px-[84px] py-[57px]">
             <h1 className="[font-family:'Inter',Helvetica] font-bold text-text-light text-[32px] tracking-[0] leading-[normal] mb-4">
               Contact
@@ -71,7 +69,7 @@ const headerLinks = HEADER_LINKS;
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-800 mb-4">
           Contactez-nous pour toute question
         </h1>
-        <div className="w-16 h-1 bg-[#1D8EE6] rounded-full mb-5"></div>
+        <div className="w-16 h-1 bg-[#C86D85] rounded-full mb-5"></div>
         <p className="max-w-3xl text-base md:text-lg text-slate-500 leading-relaxed">
           Vous avez une question sur nos produits, le suivi de votre commande ou
           besoin de conseils personnalisés ? L&#39;équipe de Florea est à votre
@@ -86,9 +84,9 @@ const headerLinks = HEADER_LINKS;
         {/* Left side: Contact info cards */}
         <div className="lg:col-span-2 space-y-5">
           {/* Adresse */}
-          <div className="group bg-white rounded-2xl border border-slate-100 p-6 flex items-center gap-5 shadow-sm hover:shadow-md hover:border-[#1D8EE6]/30 transition-all duration-300 cursor-default">
-            <div className="w-14 h-14 bg-[#EBF5FC] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#1D8EE6] transition-colors duration-300">
-              <svg className="w-6 h-6 text-[#1D8EE6] group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+          <div className="group bg-white rounded-2xl border border-slate-100 p-6 flex items-center gap-5 shadow-sm hover:shadow-md hover:border-[#C86D85]/30 transition-all duration-300 cursor-default">
+            <div className="w-14 h-14 bg-[#F7F0DC] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#C86D85] transition-colors duration-300">
+              <svg className="w-6 h-6 text-[#C86D85] group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7V2z" />
               </svg>
             </div>
@@ -99,63 +97,29 @@ const headerLinks = HEADER_LINKS;
             </div>
           </div>
 
-          {/* Téléphone */}
-          <div className="group bg-white rounded-2xl border border-slate-100 p-6 flex items-center gap-5 shadow-sm hover:shadow-md hover:border-[#1D8EE6]/30 transition-all duration-300 cursor-default">
-            <div className="w-14 h-14 bg-[#EBF5FC] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#1D8EE6] transition-colors duration-300">
-              <PhoneIcon className="w-6 h-6 text-[#1D8EE6] group-hover:text-white transition-colors duration-300" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Téléphone</p>
-              <a href="tel:+21653230222" className="font-semibold text-slate-800 text-base hover:text-[#1D8EE6] transition-colors">
-                +216 53 230 222
-              </a>
-            </div>
-          </div>
-
           {/* Email */}
-          <div className="group bg-white rounded-2xl border border-slate-100 p-6 flex items-center gap-5 shadow-sm hover:shadow-md hover:border-[#1D8EE6]/30 transition-all duration-300 cursor-default">
-            <div className="w-14 h-14 bg-[#EBF5FC] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#1D8EE6] transition-colors duration-300">
-              <MailIcon className="w-6 h-6 text-[#1D8EE6] group-hover:text-white transition-colors duration-300" />
+          <div className="group bg-white rounded-2xl border border-slate-100 p-6 flex items-center gap-5 shadow-sm hover:shadow-md hover:border-[#C86D85]/30 transition-all duration-300 cursor-default">
+            <div className="w-14 h-14 bg-[#F7F0DC] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#C86D85] transition-colors duration-300">
+              <MailIcon className="w-6 h-6 text-[#C86D85] group-hover:text-white transition-colors duration-300" />
             </div>
             <div>
               <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Email</p>
-              <a href="mailto:y.jabbes@yjpharmaconsult.com" className="font-semibold text-slate-800 text-base hover:text-[#1D8EE6] transition-colors">
+              <a href="mailto:y.jabbes@yjpharmaconsult.com" className="font-semibold text-slate-800 text-base hover:text-[#C86D85] transition-colors">
                 y.jabbes@yjpharmaconsult.com
-              </a>
-            </div>
-          </div>
-
-          {/* Réseaux sociaux */}
-          <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-4">Réseaux sociaux</p>
-            <div className="flex items-center gap-3">
-              <a
-                href="https://www.facebook.com/profile.php?id=61590827016876"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-11 h-11 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 hover:text-white hover:bg-[#1D8EE6] hover:scale-105 transition-all duration-300"
-              >
-                <FaFacebookF className="w-5 h-5" />
-              </a>
-              <a
-                href="https://www.instagram.com/yjpara.96830757?igsh=MW4zejl6NTVkeGk0Mw=="
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-11 h-11 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 hover:text-white hover:bg-gradient-to-br hover:from-[#E1306C] hover:to-[#833AB4] hover:scale-105 transition-all duration-300"
-              >
-                <FaInstagram className="w-5 h-5" />
               </a>
             </div>
           </div>
         </div>
 
-        {/* Right side: Logo card matching height and width of the form */}
+        {/* Right side: logo card matching height and width of the form */}
         <div className="lg:col-span-3 flex items-center justify-center bg-white rounded-2xl border border-slate-100 shadow-sm p-8 md:p-10 min-h-[480px] w-full">
-          <img
-            src="/figmaAssets/logo YJPARA.jpeg"
-            alt="YJ PARA Logo"
-            className="max-h-[320px] w-auto object-contain hover:scale-105 transition-transform duration-300"
-          />
+          <div className="w-56 h-56 rounded-full bg-black overflow-hidden flex items-center justify-center shadow-lg">
+            <img
+              src="/figmaAssets/brand/glow-store-logo.jpeg"
+              alt="Glow Store Logo"
+              className="w-full h-full object-cover scale-125 hover:scale-[1.35] transition-transform duration-300"
+            />
+          </div>
         </div>
       </div>
     </section>

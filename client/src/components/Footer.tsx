@@ -50,9 +50,7 @@ const Footer: React.FC<FooterProps> = ({ footerSections }) => {
     {
       title: "INFORMATIONS",
       links: [
-        { name: "À Propos", href: "/propos" },
         { name: "Produits", href: "/products" },
-        { name: "Contact", href: "/contact" },
       ],
     },
     {
@@ -74,7 +72,6 @@ const Footer: React.FC<FooterProps> = ({ footerSections }) => {
       title: "CONTACT",
       links: [
         { name: "Nous contacter", href: "/contact" },
-        { name: "+216 53 230 222", href: "tel:+21653230222" },
       ],
     },
   ];
@@ -113,48 +110,30 @@ const Footer: React.FC<FooterProps> = ({ footerSections }) => {
   );
 
   return (
-    <footer className="bg-[#EBF5FC] text-slate-800 border-t border-slate-200">
+    <footer className="bg-[#FDF5F6] text-slate-800 border-t border-rose-100">
       <div className="flex flex-col lg:flex-row">
         {/* Company info section */}
-        <div className="lg:w-1/3 bg-white p-8 lg:p-12 border-r border-slate-100">
-          <img
-            className="w-28 lg:w-[140px] h-auto mb-8"
-            alt="YJ PARA logo"
-            src="/figmaAssets/logo YJPARA.jpeg"
-          />
-
-          <p className="text-slate-500 text-sm leading-relaxed mb-8 font-medium">
-            YJ PARA est née d'une ambition claire : rendre les soins de
-            parapharmacie plus accessibles, plus humains et parfaitement adaptés
-            aux besoins de chacun.
-          </p>
-
-          <div className="mb-4">
-            <div className="text-slate-400 font-semibold text-sm tracking-wide uppercase">Appelez nous sur :</div>
-            <div className="text-[#1D8EE6] font-bold text-3xl lg:text-4xl mt-2">
-              <a href="tel:+21653230222" className="hover:text-blue-400 transition-colors">
-                +216 53 230 222
-              </a>
-            </div>
+        <div className="lg:w-1/3 bg-white p-8 lg:p-12 border-r border-rose-100/60">
+          <div className="w-20 h-20 rounded-full bg-black overflow-hidden flex items-center justify-center mb-6 shadow-md">
+            <img
+              className="w-full h-full object-cover scale-125"
+              alt="Glow Store logo"
+              src="/figmaAssets/brand/glow-store-logo.jpeg"
+            />
           </div>
 
+          <p className="text-slate-500 text-sm leading-relaxed mb-8 font-medium">
+            Une sélection de produits cosmétiques pensée pour révéler votre
+            beauté naturelle et prendre soin de vous au quotidien.
+          </p>
+
           <div className="flex items-center gap-4 mt-[40px]">
-            <a
-              href="https://www.facebook.com/profile.php?id=61590827016876"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 hover:text-white hover:bg-[#1D8EE6] hover:scale-105 transition-all duration-300"
-            >
+            <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center text-[#C86D85] cursor-default">
               <FaFacebookF className="w-4 h-4" />
-            </a>
-            <a
-              href="https://www.instagram.com/yjpara.96830757?igsh=MW4zejl6NTVkeGk0Mw=="
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 hover:text-white hover:bg-gradient-to-br hover:from-[#E1306C] hover:to-[#833AB4] hover:scale-105 transition-all duration-300"
-            >
+            </div>
+            <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center text-[#C86D85] cursor-default">
               <FaInstagram className="w-4 h-4" />
-            </a>
+            </div>
           </div>
         </div>
 
@@ -168,20 +147,20 @@ const Footer: React.FC<FooterProps> = ({ footerSections }) => {
                 <div className="mb-4">
                   <button
                     onClick={() => handleNavigation(TITLE_LINKS[section.title.toUpperCase()] || "#")}
-                    className="hover:text-[#1D8EE6] transition-colors text-left"
+                    className="hover:text-[#C86D85] transition-colors text-left"
                   >
-                    <h3 className="font-bold text-slate-800 text-base mb-2 hover:text-[#1D8EE6] transition-colors cursor-pointer">
+                    <h3 className="font-bold text-slate-800 text-base mb-2 hover:text-[#C86D85] transition-colors cursor-pointer">
                       {section.title}
                     </h3>
                   </button>
-                  <Separator className="w-10 h-1 bg-[#1D8EE6] rounded-full" />
+                  <Separator className="w-10 h-1 bg-[#D88A9E] rounded-full" />
                 </div>
                 <ul className="space-y-2">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
                       <button
                         onClick={() => handleNavigation(link.href)}
-                        className="text-slate-500 hover:text-[#1D8EE6] transition-colors text-sm font-medium text-left w-full"
+                        className="text-slate-500 hover:text-[#C86D85] transition-colors text-sm font-medium text-left w-full"
                       >
                         {link.name}
                       </button>
@@ -194,12 +173,12 @@ const Footer: React.FC<FooterProps> = ({ footerSections }) => {
             {/* Newsletter section */}
             <div>
               <div className="mb-4">
-                <Link to="/contact" className="hover:text-[#1D8EE6] transition-colors">
-                  <h3 className="font-bold text-slate-800 text-base mb-2 hover:text-[#1D8EE6] transition-colors cursor-pointer">
+                <Link to="/contact" className="hover:text-[#C86D85] transition-colors">
+                  <h3 className="font-bold text-slate-800 text-base mb-2 hover:text-[#C86D85] transition-colors cursor-pointer">
                     NEWSLETTRES
                   </h3>
                 </Link>
-                <Separator className="w-10 h-1 bg-[#1D8EE6] rounded-full" />
+                <Separator className="w-10 h-1 bg-[#D88A9E] rounded-full" />
               </div>
               <p className="text-slate-500 text-sm font-medium leading-relaxed">
                 Vous pouvez vous désinscrire à tout moment.
@@ -214,20 +193,20 @@ const Footer: React.FC<FooterProps> = ({ footerSections }) => {
               <div className="mb-4">
                 <button
                   onClick={() => handleNavigation("/products")}
-                  className="hover:text-[#1D8EE6] transition-colors text-left"
+                  className="hover:text-[#C86D85] transition-colors text-left"
                 >
-                  <h3 className="font-bold text-slate-800 text-base mb-2 hover:text-[#1D8EE6] transition-colors cursor-pointer">
+                  <h3 className="font-bold text-slate-800 text-base mb-2 hover:text-[#C86D85] transition-colors cursor-pointer">
                     {categoriesSection.title}
                   </h3>
                 </button>
-                <Separator className="w-10 h-1 bg-[#1D8EE6] rounded-full" />
+                <Separator className="w-10 h-1 bg-[#D88A9E] rounded-full" />
               </div>
               <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
                 {categoriesSection.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <button
                       onClick={() => handleNavigation(link.href)}
-                      className="text-slate-500 hover:text-[#1D8EE6] transition-colors text-sm font-medium text-left w-full py-0.5"
+                      className="text-slate-500 hover:text-[#C86D85] transition-colors text-sm font-medium text-left w-full py-0.5"
                     >
                       {link.name}
                     </button>
@@ -240,11 +219,10 @@ const Footer: React.FC<FooterProps> = ({ footerSections }) => {
           {/* Copyright */}
           <div className="mt-10 pt-8 border-t border-slate-100 text-center">
             <div className="text-sm font-medium">
-              <span className="font-bold text-[#1D8EE6]">YJ PARA</span>
-              <span className="text-slate-400"> COPYRIGHT © 2026</span>
+              <span className="text-slate-400">COPYRIGHT © 2026</span>
               <br />
               <span className="text-slate-400 font-normal mt-1 block">
-                powered by <a href="https://genzbuildersltd.com/" target="_blank" rel="noopener noreferrer" className="text-[#1D8EE6] font-bold hover:underline">GenZ builders</a>
+                powered by <a href="https://genzbuildersltd.com/" target="_blank" rel="noopener noreferrer" className="text-[#C86D85] font-bold hover:underline">GenZ builders</a>
               </span>
             </div>
           </div>

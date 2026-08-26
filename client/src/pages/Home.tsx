@@ -8,11 +8,10 @@ import Header from "@/components/Header";
 import { MobileHeader } from "@/components/MobileHeader";
 import Footer from "@/components/Footer";
 import { convertImageUrl, onImgError } from "@/lib/imageUtils";
-import { ShoppingCartIcon, ChevronLeft, ChevronRight, Zap } from "lucide-react";
+import { ShoppingCartIcon, ChevronLeft, ChevronRight, Zap, Sparkles } from "lucide-react";
 import { useCart } from "@/contexts/CartProvider";
 import { SERVICE_FEATURES, NAVIGATION_ITEMS, HEADER_LINKS, FOOTER_SECTIONS } from "@/lib/pageData";
 import { isProductAvailable, showToast } from "@/lib/productUtils";
-import { useBrandLogos } from "@/hooks/useBrandLogos";
 import { useActivePromotion } from "@/hooks/useActivePromotion";
 import { useGalleryImages } from "@/hooks/useGalleryImages";
 import { useProductCategories } from "@/hooks/useProductCategories";
@@ -103,7 +102,6 @@ const ProductCountdown = ({ productId }: { productId: number }) => {
 export const Home = (): JSX.Element => {
 
   const [latestProducts, setLatestProducts] = useState<Product[]>([]);
-  const brandLogos = useBrandLogos();
   // Home pagination: show 9 product cards per page
   const [homePage, setHomePage] = useState(1);
   const itemsPerPageHome = 9;
@@ -267,7 +265,6 @@ export const Home = (): JSX.Element => {
       }
 
       const productsWithExtras = (products || [])
-        .filter((p: any) => p?.tva != null && Number(p.tva) !== 0)
         .map((product) => {
         const category = categories?.find((c) => c.id === product.category_id);
         const categoryName = category ? category.name : "Uncategorized";
@@ -328,26 +325,15 @@ export const Home = (): JSX.Element => {
   //   "/figmaAssets/t1.svg",
   //   "/figmaAssets/t4.png"
   // ];
-  const images = useGalleryImages();
+  const galleryImages = useGalleryImages();
+  const usingFallbackSlides = galleryImages.length === 0;
+  const slideCount = usingFallbackSlides ? 1 : galleryImages.length;
 
   const { cart, addToCart } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { getQty, changeQty } = useQuantityManager();
 
   const [current, setCurrent] = useState(0);
-  const [paraBannerCurrent, setParaBannerCurrent] = useState(0);
-  const paraBannerImages = [
-    "/figmaAssets/para/prod1.webp",
-    "/figmaAssets/rectangle-111.svg",
-  ];
-  const [bestBannerCurrent, setBestBannerCurrent] = useState(0);
-  const bestBannerImages = [
-
-    "/figmaAssets/para/image1.png",
-    "/figmaAssets/para/image2.jpeg",
-
-
-  ];
   const productCategories = useProductCategories();
   // const [loading, setLoading] = useState(true);
 
@@ -355,36 +341,6 @@ export const Home = (): JSX.Element => {
   const [isDraggingCategory, setIsDraggingCategory] = useState(false);
   const [startXCategory, setStartXCategory] = useState(0);
   const [scrollLeftCategory, setScrollLeftCategory] = useState(0);
-
-  const brandScrollRef = useRef<HTMLDivElement>(null);
-  const [isDraggingBrand, setIsDraggingBrand] = useState(false);
-  const [startXBrand, setStartXBrand] = useState(0);
-  const [scrollLeftBrand, setScrollLeftBrand] = useState(0);
-
-  const handleMouseDownBrand = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsDraggingBrand(true);
-    setStartXBrand(e.pageX - (brandScrollRef.current?.offsetLeft || 0));
-    setScrollLeftBrand(brandScrollRef.current?.scrollLeft || 0);
-  };
-  const handleMouseLeaveOrUpBrand = () => setIsDraggingBrand(false);
-  const handleMouseMoveBrand = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDraggingBrand) return;
-    e.preventDefault();
-    const x = e.pageX - (brandScrollRef.current?.offsetLeft || 0);
-    const walk = (x - startXBrand) * 1.5;
-    if (brandScrollRef.current) brandScrollRef.current.scrollLeft = scrollLeftBrand - walk;
-  };
-  const handleTouchStartBrand = (e: React.TouchEvent<HTMLDivElement>) => {
-    setIsDraggingBrand(true);
-    setStartXBrand(e.touches[0].pageX - (brandScrollRef.current?.offsetLeft || 0));
-    setScrollLeftBrand(brandScrollRef.current?.scrollLeft || 0);
-  };
-  const handleTouchMoveBrand = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!isDraggingBrand) return;
-    const x = e.touches[0].pageX - (brandScrollRef.current?.offsetLeft || 0);
-    const walk = (x - startXBrand) * 1.5;
-    if (brandScrollRef.current) brandScrollRef.current.scrollLeft = scrollLeftBrand - walk;
-  };
 
   const handleMouseDownCategory = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsDraggingCategory(true);
@@ -443,7 +399,7 @@ export const Home = (): JSX.Element => {
 
   const handleAddToCart = (product: any, qty: number = 1) => {
     const stockVal = product.form != null && product.form !== "" ? Number(product.form) : null;
-    const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal - 3 : null;
+    const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal : null;
     const currentInCart = (cart as any[]).find((i: any) => String(i.id) === String(product.id))?.quantity || 0;
     if (maxOrderable !== null && currentInCart + qty > maxOrderable) {
       const remaining = Math.max(0, maxOrderable - currentInCart);
@@ -475,16 +431,15 @@ export const Home = (): JSX.Element => {
   };
   // 👇 Changer l'image toutes les 5s (seulement quand les images sont chargées)
   useEffect(() => {
-    if (images.length === 0) return; // guard: ne pas démarrer si vide
-    setCurrent(0); // reset au début quand les images changent
+    setCurrent(0); // reset au début quand les slides changent
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
+      setCurrent((prev) => (prev + 1) % slideCount);
     }, 5000);
     return () => clearInterval(interval);
-  }, [images]);
+  }, [slideCount]);
 
   return (
-    <div className="bg-white min-h-screen w-full">
+    <div className="bg-gradient-to-b from-[#FFF8F8] via-[#FDF2F4] to-[#FAF0F2] min-h-screen w-full">
       {/* Header — desktop / mobile adaptatif */}
       <div className="hidden md:block">
         <Header
@@ -499,14 +454,18 @@ export const Home = (): JSX.Element => {
       </div>
 
       {/* Hero banner */}
-      <section className="py-1 bg-white">
+      <section className="py-1 bg-transparent">
         <div className="w-full">
-          <div className="relative w-full h-32 sm:h-44 lg:h-52 overflow-hidden shadow-sm group">
-            {images.length === 0 ? (
-              <div className="w-full h-full bg-slate-50 animate-pulse" />
+          <div className="relative w-full h-48 sm:h-64 lg:h-80 overflow-hidden shadow-sm group">
+            {usingFallbackSlides ? (
+              <img
+                src="/figmaAssets/brand/banners/cosmetic-10.jpg"
+                alt="Cosmétiques"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             ) : (
               <>
-                {images.map((src, index) => (
+                {galleryImages.map((src, index) => (
                   <img
                     key={src}
                     src={src}
@@ -523,9 +482,9 @@ export const Home = (): JSX.Element => {
             )}
 
             {/* Points de navigation */}
-            {images.length > 1 && (
+            {slideCount > 1 && (
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2" style={{ zIndex: 10 }}>
-                {images.map((_, index) => (
+                {Array.from({ length: slideCount }).map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrent(index)}
@@ -537,17 +496,17 @@ export const Home = (): JSX.Element => {
             )}
 
             {/* Flèches de navigation */}
-            {images.length > 1 && (
+            {slideCount > 1 && (
               <>
                 <button
-                  onClick={() => setCurrent((prev) => (prev - 1 + images.length) % images.length)}
+                  onClick={() => setCurrent((prev) => (prev - 1 + slideCount) % slideCount)}
                   className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/25 hover:bg-black/45 text-white backdrop-blur-sm border border-white/10 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 opacity-100 transition-opacity duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
                   aria-label="Slide précédent"
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <button
-                  onClick={() => setCurrent((prev) => (prev + 1) % images.length)}
+                  onClick={() => setCurrent((prev) => (prev + 1) % slideCount)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/25 hover:bg-black/45 text-white backdrop-blur-sm border border-white/10 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 opacity-100 transition-opacity duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
                   aria-label="Slide suivant"
                 >
@@ -560,13 +519,13 @@ export const Home = (): JSX.Element => {
       </section>
 
 
-      {/* ⚡ Ventes Flash — Ultra Premium & Attractive Design */}
-      <section id="promotions" className="py-3 bg-gradient-to-br from-[#F4F9FF] via-white to-[#F0F7FF] border-y border-[#1D8EE6]/10 relative overflow-hidden group/section">
+      {/* ⚡ Ventes Flash — Feminine Soft Blush Design */}
+      <section id="promotions" className="py-6 bg-gradient-to-br from-[#FFF7ED] via-[#FDF1F0] to-[#FBEAF1] border-y border-[#D88A9E]/15 relative overflow-hidden group/section">
 
         {/* Abstract Glowing Background Shapes */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[60%] bg-gradient-to-br from-blue-300/20 to-indigo-300/10 rounded-full blur-[100px] animate-[pulse_6s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[50%] bg-gradient-to-tl from-rose-300/10 to-orange-300/10 rounded-full blur-[80px] animate-[pulse_8s_ease-in-out_infinite_reverse]" />
+          <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[60%] bg-gradient-to-br from-rose-300/25 to-pink-200/15 rounded-full blur-[100px] animate-[pulse_6s_ease-in-out_infinite]" />
+          <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[50%] bg-gradient-to-tl from-rose-200/20 to-pink-300/15 rounded-full blur-[80px] animate-[pulse_8s_ease-in-out_infinite_reverse]" />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -576,22 +535,22 @@ export const Home = (): JSX.Element => {
 
             {/* Left: Title Area */}
             <div className="flex items-center gap-3">
-              <div className="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-white to-slate-50 rounded-2xl shadow-[0_8px_16px_rgba(29,142,230,0.1)] border border-white">
-                <span className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#1D8EE6]/20 to-transparent opacity-50"></span>
-                <Zap className="w-5 h-5 text-[#1D8EE6] fill-[#1D8EE6]/10 animate-bounce" />
+              <div className="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-white to-rose-50 rounded-2xl shadow-[0_8px_16px_rgba(216,138,158,0.15)] border border-white">
+                <span className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#D88A9E]/20 to-transparent opacity-50"></span>
+                <Zap className="w-5 h-5 text-[#C86D85] fill-[#C86D85]/10 animate-bounce" />
               </div>
 
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1D8EE6]" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C86D85]" />
                   </span>
-                  <span className="text-[9px] font-black text-[#1D8EE6] tracking-[0.3em] uppercase bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                  <span className="text-[9px] font-black text-[#C86D85] tracking-[0.3em] uppercase bg-[#FDF0F3] px-2 py-0.5 rounded-md border border-[#F8D7DF]">
                     Offre Limitée
                   </span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-800 via-slate-700 to-[#1D8EE6] tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-800 via-rose-900 to-[#C86D85] tracking-tight">
                   Ventes Flash
                 </h2>
               </div>
@@ -599,9 +558,9 @@ export const Home = (): JSX.Element => {
 
             {/* Right: Stunning Glassmorphism Countdown - Now fully animated! (Commented out as each card has its own timer now) */}
             {/* 
-            <div className="flex items-center gap-4 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2.5rem] p-2.5 shadow-[0_10px_30px_rgba(29,142,230,0.08)] hover:shadow-[0_15px_40px_rgba(29,142,230,0.2)] transition-all duration-500 hover:scale-[1.02] cursor-default group/timer">
+            <div className="flex items-center gap-4 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2.5rem] p-2.5 shadow-[0_10px_30px_rgba(216,138,158,0.08)] hover:shadow-[0_15px_40px_rgba(216,138,158,0.2)] transition-all duration-500 hover:scale-[1.02] cursor-default group/timer">
 
-              <div className="relative overflow-hidden bg-gradient-to-r from-[#1D8EE6] to-blue-600 rounded-[2rem] px-6 py-3.5 flex items-center gap-2.5 shadow-inner transition-transform duration-500 group-hover/timer:shadow-[0_0_20px_rgba(29,142,230,0.4)]">
+              <div className="relative overflow-hidden bg-gradient-to-r from-[#C86D85] to-[#E8A5B8] rounded-[2rem] px-6 py-3.5 flex items-center gap-2.5 shadow-inner transition-transform duration-500 group-hover/timer:shadow-[0_0_20px_rgba(216,138,158,0.4)]">
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/timer:animate-[pulse_1s_ease-in-out_infinite] skew-x-12 transition-all duration-700" />
 
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white/90 animate-pulse relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -647,7 +606,7 @@ export const Home = (): JSX.Element => {
                 <button
                   onClick={() => setFlashPage(p => Math.max(1, p - 1))}
                   disabled={flashPage === 1}
-                  className="w-9 h-9 rounded-full bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-[#1D8EE6]/40 hover:text-[#1D8EE6] disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                  className="w-9 h-9 rounded-full bg-white border border-rose-100 shadow-sm hover:shadow-md hover:border-[#D88A9E]/40 hover:text-[#C86D85] disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center"
                   aria-label="Produits précédents"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -658,7 +617,7 @@ export const Home = (): JSX.Element => {
                 <button
                   onClick={() => setFlashPage(p => Math.min(Math.ceil(specialOfferProducts.length / flashItemsPerPage), p + 1))}
                   disabled={flashPage >= Math.ceil(specialOfferProducts.length / flashItemsPerPage)}
-                  className="w-9 h-9 rounded-full bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-[#1D8EE6]/40 hover:text-[#1D8EE6] disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center"
+                  className="w-9 h-9 rounded-full bg-white border border-rose-100 shadow-sm hover:shadow-md hover:border-[#D88A9E]/40 hover:text-[#C86D85] disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center"
                   aria-label="Produits suivants"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -681,11 +640,11 @@ export const Home = (): JSX.Element => {
                   return (
                     <div
                       key={product.id}
-                      className="group relative bg-white rounded-3xl border border-slate-100 hover:border-[#1D8EE6]/30 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_25px_50px_-12px_rgba(29,142,230,0.15)] transition-all duration-500 overflow-hidden flex flex-col hover:-translate-y-1"
+                      className="group relative bg-white rounded-3xl border border-rose-100/70 hover:border-[#D88A9E]/40 shadow-[0_4px_20px_rgba(216,138,158,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(216,138,158,0.2)] transition-all duration-500 overflow-hidden flex flex-col hover:-translate-y-1"
                       style={{ animationDelay: `${idx * 100}ms` }}
                     >
                       {/* Highlight Glow Effect */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-[#1D8EE6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-[#D88A9E]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                       {/* Discount Badge */}
                       {discountPct !== null && discountPct > 0 && (
@@ -705,7 +664,7 @@ export const Home = (): JSX.Element => {
                       </div>
 
                       {/* Image */}
-                      <Link to={`/detailsprod/${product.id}`} className="relative block p-2 sm:p-4 bg-[#F8FAFF] group-hover:bg-blue-50/50 transition-colors duration-500 flex items-center justify-center h-32 sm:h-44 overflow-hidden rounded-t-3xl">
+                      <Link to={`/detailsprod/${product.id}`} className="relative block p-2 sm:p-4 bg-gradient-to-b from-[#FFF5F6] to-white group-hover:bg-[#FDF0F3]/60 transition-colors duration-500 flex items-center justify-center h-32 sm:h-44 overflow-hidden rounded-t-3xl">
                         <div className="absolute inset-0 bg-white mix-blend-overlay opacity-50" />
                         <img
                           className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-multiply relative z-10 drop-shadow-[0_4px_12px_rgba(0,0,0,0.05)]"
@@ -724,7 +683,7 @@ export const Home = (): JSX.Element => {
                             <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest truncate">{product.brand}</span>
                           )}
                           {(product.categories || [])[0] && (
-                            <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 bg-blue-50 text-[#1D8EE6] rounded text-[8px] font-bold uppercase tracking-widest">
+                            <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 bg-[#FDF0F3] text-[#C86D85] rounded text-[8px] font-bold uppercase tracking-widest border border-[#F8D7DF]">
                               {(product.categories || [])[0]}
                             </span>
                           )}
@@ -739,17 +698,17 @@ export const Home = (): JSX.Element => {
                         )}
 
                         <Link to={`/detailsprod/${product.id}`} className="block mb-2">
-                          <h3 className="font-bold text-slate-800 text-[11px] sm:text-sm leading-tight line-clamp-2 group-hover:text-[#1D8EE6] transition-colors" style={{minHeight:'2.4em'}}>
+                          <h3 className="font-bold text-slate-800 text-[11px] sm:text-sm leading-tight line-clamp-2 group-hover:text-[#C86D85] transition-colors" style={{minHeight:'2.4em'}}>
                             {product.name}
                           </h3>
                         </Link>
 
                         {/* Price + individual counter + cart */}
                         <div className="mt-auto flex flex-col gap-2">
-                          <div className="flex items-end gap-1 bg-slate-50/50 p-1.5 sm:p-2 rounded-lg border border-slate-50">
-                            <span className="font-black text-sm sm:text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#1D8EE6] to-blue-500 leading-none">
+                          <div className="flex items-end gap-1 bg-rose-50/40 p-1.5 sm:p-2 rounded-lg border border-rose-100/50">
+                            <span className="font-black text-sm sm:text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#C86D85] to-[#E07A95] leading-none">
                               {Number(product.price).toFixed(3)}
-                              <span className="text-[9px] font-bold text-[#1D8EE6] ml-0.5">&nbsp;DT</span>
+                              <span className="text-[9px] font-bold text-[#C86D85] ml-0.5">&nbsp;DT</span>
                             </span>
                             {product.originalPrice && (
                               <span className="text-[9px] font-bold text-slate-400 line-through decoration-rose-300/50 mb-0.5">
@@ -760,18 +719,18 @@ export const Home = (): JSX.Element => {
 
                           <div className="flex items-center gap-1">
                             {/* Individual QTY counter per card */}
-                            <div className="flex items-center justify-between bg-white rounded-lg border border-slate-200 p-0.5 shadow-sm w-16 sm:w-20">
+                            <div className="flex items-center justify-between bg-white rounded-lg border border-rose-100 p-0.5 shadow-sm w-16 sm:w-20">
                               <button
                                 onClick={(e) => { e.preventDefault(); changeFlashQty(product.id, -1); }}
-                                className="w-5 h-5 sm:w-6 sm:h-6 rounded flex items-center justify-center text-slate-500 font-bold hover:bg-slate-50 hover:text-[#1D8EE6] transition-colors text-xs"
-                              >-</button>
+                                className="w-5 h-5 sm:w-6 sm:h-6 rounded flex items-center justify-center text-slate-500 font-bold hover:bg-rose-50 hover:text-[#C86D85] transition-colors text-xs"
+                              >−</button>
                               <span className="text-[9px] font-black text-slate-700">{getFlashQty(product.id)}</span>
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
                                   const stockVal = product.form !== null && product.form !== undefined && product.form !== ""
                                     ? Number(product.form) : null;
-                                  const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+                                  const maxOrderable = stockVal !== null ? stockVal : null;
                                   if (maxOrderable !== null && getFlashQty(product.id) + 1 > maxOrderable) {
                                     toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
                                       style: { borderRadius: "10px", background: "#333", color: "#fff" },
@@ -780,14 +739,14 @@ export const Home = (): JSX.Element => {
                                   }
                                   changeFlashQty(product.id, 1);
                                 }}
-                                className="w-5 h-5 sm:w-6 sm:h-6 rounded flex items-center justify-center text-slate-500 font-bold hover:bg-slate-50 hover:text-[#1D8EE6] transition-colors text-xs"
+                                className="w-5 h-5 sm:w-6 sm:h-6 rounded flex items-center justify-center text-slate-500 font-bold hover:bg-rose-50 hover:text-[#C86D85] transition-colors text-xs"
                               >+</button>
                             </div>
 
                             {/* Add to Cart */}
                             <button
                               onClick={(e) => { e.preventDefault(); handleAddToCart(product, getFlashQty(product.id)); }}
-                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#1D8EE6] to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(29,142,230,0.2)] hover:shadow-[0_6px_15px_rgba(29,142,230,0.3)] hover:-translate-y-0.5 overflow-hidden"
+                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#D88A9E] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(216,138,158,0.25)] hover:shadow-[0_6px_15px_rgba(216,138,158,0.35)] hover:-translate-y-0.5 overflow-hidden"
                             >
                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                               <div className="flex items-center gap-1 relative z-10">
@@ -808,7 +767,7 @@ export const Home = (): JSX.Element => {
       </section>
 
       {/* Product categories */}
-      <section className="py-14 bg-white relative group">
+      <section className="py-14 bg-transparent relative group">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           {/* Left Arrow Button */}
           <button
@@ -817,7 +776,7 @@ export const Home = (): JSX.Element => {
             }}
             onMouseEnter={() => setIsAutoScrollingPaused(true)}
             onMouseLeave={() => setIsAutoScrollingPaused(false)}
-            className="absolute left-0 md:-left-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#1D8EE6] focus:outline-none cursor-pointer"
+            className="absolute left-0 md:-left-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-rose-100 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#C86D85] focus:outline-none cursor-pointer"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
@@ -830,7 +789,7 @@ export const Home = (): JSX.Element => {
             }}
             onMouseEnter={() => setIsAutoScrollingPaused(true)}
             onMouseLeave={() => setIsAutoScrollingPaused(false)}
-            className="absolute right-0 md:-right-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#1D8EE6] focus:outline-none cursor-pointer"
+            className="absolute right-0 md:-right-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-rose-100 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#C86D85] focus:outline-none cursor-pointer"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
@@ -855,7 +814,7 @@ export const Home = (): JSX.Element => {
                 className="flex-shrink-0 text-center cursor-pointer group/item"
               >
                 <div className="relative w-24 h-24 sm:w-32 sm:h-32 lg:w-36 lg:h-36 mx-auto transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] filter drop-shadow-sm hover:drop-shadow-md hover:scale-105">
-                  <div className="w-full h-full clip-octagon overflow-hidden bg-white">
+                  <div className="w-full h-full clip-octagon overflow-hidden bg-white border border-rose-100/60">
                     {category.image ? (
                       <img
                         className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-105"
@@ -866,15 +825,15 @@ export const Home = (): JSX.Element => {
                         decoding="async"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-                        <span className="text-2xl sm:text-3xl font-black text-[#1D8EE6] uppercase select-none">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-100">
+                        <span className="text-2xl sm:text-3xl font-black text-[#C86D85] uppercase select-none">
                           {category.name.charAt(0)}
                         </span>
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="mt-4 font-semibold text-slate-700 text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider group-hover/item:text-[#1D8EE6] transition-colors max-w-[100px] sm:max-w-[140px] mx-auto leading-tight">
+                <div className="mt-4 font-semibold text-slate-700 text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider group-hover/item:text-[#C86D85] transition-colors max-w-[100px] sm:max-w-[140px] mx-auto leading-tight">
                   {category.name}
                 </div>
               </Link>
@@ -883,91 +842,29 @@ export const Home = (): JSX.Element => {
         </div>
       </section>
 
-      {/* Parapharmacy Advertising Banner Section */}
-      <section className="py-8 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative w-full rounded-2xl overflow-hidden shadow-sm border border-slate-100 group">
-            <Link to="/products" className="block w-full relative overflow-hidden">
-              <img
-                src="/figmaAssets/bande2.png"
-                alt="Votre santé et votre beauté au naturel"
-                className="w-full h-48 md:h-auto object-fill md:object-cover block"
-                style={{ minHeight: '180px' }}
-                loading="lazy"
-                decoding="async"
-              />
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Latest products */}
-      <section id="derniers-produits" className="py-16 bg-white">
+      <section id="derniers-produits" className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 flex flex-col items-center text-center">
-            <span className="text-[11px] font-bold text-[#1D8EE6] tracking-[0.2em] uppercase mb-3 animate-pulse">
+            <span className="text-[11px] font-bold text-[#C86D85] tracking-[0.2em] uppercase mb-3 animate-pulse">
               SÉLECTION NOUVEAUTÉS
             </span>
             <div className="flex items-center justify-center w-full gap-4 sm:gap-8 group">
-              <div className="h-[2px] bg-gradient-to-r from-transparent via-[#1D8EE6]/50 to-[#1D8EE6] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight uppercase whitespace-nowrap text-black hover:scale-105 transition-transform duration-500">
+              <div className="h-[2px] bg-gradient-to-r from-transparent via-[#D88A9E]/50 to-[#D88A9E] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight uppercase whitespace-nowrap text-slate-800 hover:scale-105 transition-transform duration-500">
                 Nos derniers produits
               </h2>
-              <div className="h-[2px] bg-gradient-to-l from-transparent via-[#1D8EE6]/50 to-[#1D8EE6] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="h-[2px] bg-gradient-to-l from-transparent via-[#D88A9E]/50 to-[#D88A9E] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
             </div>
           </div>
 
-          {/* Horizontal Banner Image Slider */}
-          <div className="relative w-full h-48 sm:h-64 lg:h-80 mb-10 rounded-2xl overflow-hidden shadow-sm border border-slate-100 group">
-            {paraBannerImages.map((src, index) => (
-              <img
-                key={src}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-in-out"
-                alt={`Promo banner ${index + 1}`}
-                src={src}
-                loading="lazy"
-                decoding="async"
-                style={{
-                  opacity: index === paraBannerCurrent ? 1 : 0,
-                  transition: "opacity 0.8s ease-in-out",
-                  zIndex: index === paraBannerCurrent ? 1 : 0,
-                }}
-              />
-            ))}
-
-            {/* Points de navigation */}
-            {paraBannerImages.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2" style={{ zIndex: 10 }}>
-                {paraBannerImages.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setParaBannerCurrent(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === paraBannerCurrent ? "bg-white scale-125 shadow-sm" : "bg-white/40 hover:bg-white/60"
-                      }`}
-                  />
-                ))}
-              </div>
-            )}
-
-            {/* Flèches de navigation */}
-            {paraBannerImages.length > 1 && (
-              <>
-                <button
-                  onClick={() => setParaBannerCurrent((prev) => (prev - 1 + paraBannerImages.length) % paraBannerImages.length)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/25 hover:bg-black/45 text-white backdrop-blur-sm border border-white/10 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 opacity-100 transition-opacity duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
-                  aria-label="Slide précédent"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={() => setParaBannerCurrent((prev) => (prev + 1) % paraBannerImages.length)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/25 hover:bg-black/45 text-white backdrop-blur-sm border border-white/10 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 opacity-100 transition-opacity duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
-                  aria-label="Slide suivant"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              </>
-            )}
+          {/* Horizontal Banner Slider */}
+          <div className="relative w-full h-48 sm:h-64 lg:h-80 mb-10 rounded-2xl overflow-hidden shadow-sm border border-rose-100 group">
+            <img
+              src="/figmaAssets/brand/banners/cosmetic-6.jpg"
+              alt="Glow Store"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
@@ -978,7 +875,7 @@ export const Home = (): JSX.Element => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setHomePage((p) => Math.max(1, p - 1))}
-                    className="w-10 h-10 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg transition flex items-center justify-center"
+                    className="w-10 h-10 rounded-full bg-white border border-rose-100 shadow-md hover:shadow-lg transition flex items-center justify-center hover:text-[#C86D85]"
                     aria-label="Précédent"
                   >
                     <ChevronLeft className="w-5 h-5 text-slate-600" />
@@ -986,7 +883,7 @@ export const Home = (): JSX.Element => {
                   <span className="text-sm text-slate-600">{homePage} / {Math.max(1, Math.ceil(latestProducts.length / itemsPerPageHome))}</span>
                   <button
                     onClick={() => setHomePage((p) => Math.min(Math.max(1, Math.ceil(latestProducts.length / itemsPerPageHome)), p + 1))}
-                    className="w-10 h-10 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg transition flex items-center justify-center"
+                    className="w-10 h-10 rounded-full bg-white border border-rose-100 shadow-md hover:shadow-lg transition flex items-center justify-center hover:text-[#C86D85]"
                     aria-label="Suivant"
                   >
                     <ChevronRight className="w-5 h-5 text-slate-600" />
@@ -1008,7 +905,7 @@ export const Home = (): JSX.Element => {
                             : ""
                         }`}
                       >
-                    <Card className="bg-white rounded-2xl border border-slate-100/80 hover:border-[#1D8EE6]/20 hover:shadow-card transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] h-full flex flex-col overflow-hidden">
+                    <Card className="bg-white rounded-2xl border border-rose-100/70 hover:border-[#D88A9E]/30 hover:shadow-[0_10px_30px_rgba(216,138,158,0.15)] transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] h-full flex flex-col overflow-hidden">
                       <CardContent className="p-2.5 sm:p-4 flex flex-col h-full">
                         {/* Badges */}
                         <div className="flex gap-1 mb-2 flex-wrap">
@@ -1019,7 +916,7 @@ export const Home = (): JSX.Element => {
                                 key={badgeIndex}
                                 className={`h-5 px-1.5 text-[8px] sm:h-5.5 sm:px-2 sm:text-[9px] uppercase font-bold tracking-wider rounded-md border-0 shadow-none ${isPromo
                                   ? "bg-rose-50 text-rose-600 font-bold"
-                                  : "bg-blue-50 text-[#1D8EE6]"
+                                  : "bg-[#FDF0F3] text-[#C86D85]"
                                   }`}
                               >
                                 {badge}
@@ -1029,7 +926,7 @@ export const Home = (): JSX.Element => {
                         </div>
 
                         {/* Image */}
-                        <Link to={`/detailsprod/${product.id}`} className="relative mb-2 flex-shrink-0 bg-gradient-to-b from-slate-50/80 to-slate-100/30 rounded-xl p-2 sm:p-4 flex items-center justify-center h-32 sm:h-44 overflow-hidden block">
+                        <Link to={`/detailsprod/${product.id}`} className="relative mb-2 flex-shrink-0 bg-gradient-to-b from-[#FFF5F6] to-white rounded-xl p-2 sm:p-4 flex items-center justify-center h-32 sm:h-44 overflow-hidden block">
                           <img
                             className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]"
                             alt={product.name}
@@ -1049,7 +946,7 @@ export const Home = (): JSX.Element => {
 
                         {/* Name */}
                         <Link to={`/detailsprod/${product.id}`} className="block">
-                          <h3 className="font-semibold text-slate-700 text-xs sm:text-sm mb-2 line-clamp-2 hover:text-[#1D8EE6] transition-colors h-8 sm:h-10">
+                          <h3 className="font-semibold text-slate-700 text-xs sm:text-sm mb-2 line-clamp-2 hover:text-[#C86D85] transition-colors h-8 sm:h-10">
                             {product.name}
                           </h3>
                         </Link>
@@ -1059,7 +956,7 @@ export const Home = (): JSX.Element => {
                           {(product.categories || []).map((category, catIndex) => (
                             <span
                               key={catIndex}
-                              className="inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-[#F0F7FF] text-[#1D8EE6] rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest border border-[#1D8EE6]/20 shadow-sm"
+                              className="inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-[#FDF0F3] text-[#C86D85] rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest border border-[#F8D7DF] shadow-sm"
                             >
                               {category}
                             </span>
@@ -1067,7 +964,7 @@ export const Home = (): JSX.Element => {
                         </div>
 
                         {/* Price + Quantity + Button */}
-                        <div className="mt-auto pt-3 border-t border-slate-100 flex flex-col gap-2">
+                        <div className="mt-auto pt-3 border-t border-rose-100/60 flex flex-col gap-2">
                           <div className="flex flex-col">
                             {product.originalPrice &&
                               product.price &&
@@ -1076,7 +973,7 @@ export const Home = (): JSX.Element => {
                                   {Number(product.originalPrice).toFixed(3)}&nbsp;DT
                                 </span>
                               )}
-                            <span className="font-extrabold text-[#1D8EE6] text-sm sm:text-base leading-none whitespace-nowrap">
+                            <span className="font-extrabold text-[#C86D85] text-sm sm:text-base leading-none whitespace-nowrap">
                               {Number(
                                 product.price && Number(product.price) > 0
                                   ? product.price
@@ -1086,10 +983,10 @@ export const Home = (): JSX.Element => {
                             </span>
                           </div>
                           <div className="flex items-center justify-between gap-1.5">
-                            <div className="flex items-center bg-slate-50 border border-slate-200/60 rounded-lg p-0.5 shadow-sm">
+                            <div className="flex items-center bg-rose-50/40 border border-rose-100 rounded-lg p-0.5 shadow-sm">
                               <button
                                 onClick={(e) => { e.preventDefault(); changeQty(product.id, -1); }}
-                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                               >−</button>
                               <span className="w-6 text-center text-[10px] sm:text-xs font-semibold text-slate-700">{getQty(product.id)}</span>
                               <button
@@ -1097,7 +994,7 @@ export const Home = (): JSX.Element => {
                                   e.preventDefault();
                                   const stockVal = product.form !== null && product.form !== undefined && product.form !== ""
                                     ? Number(product.form) : null;
-                                  const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+                                  const maxOrderable = stockVal !== null ? stockVal : null;
                                   if (maxOrderable !== null && getQty(product.id) + 1 > maxOrderable) {
                                     toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
                                       style: { borderRadius: "10px", background: "#333", color: "#fff" },
@@ -1106,12 +1003,12 @@ export const Home = (): JSX.Element => {
                                   }
                                   changeQty(product.id, 1);
                                 }}
-                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                               >+</button>
                             </div>
                             <button
                               onClick={(e) => { e.preventDefault(); handleAddToCart(product, getQty(product.id)); }}
-                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#1D8EE6] to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(29,142,230,0.2)] hover:shadow-[0_6px_15px_rgba(29,142,230,0.3)] hover:-translate-y-0.5 overflow-hidden"
+                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#D88A9E] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(216,138,158,0.25)] hover:shadow-[0_6px_15px_rgba(216,138,158,0.35)] hover:-translate-y-0.5 overflow-hidden"
                             >
                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                               <div className="flex items-center gap-1 relative z-10">
@@ -1134,80 +1031,35 @@ export const Home = (): JSX.Element => {
       </section>
 
       {/* Divider */}
-      {/* Divider */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6">
-        <div className="h-[1px] bg-slate-100 relative">
-          <div className="absolute top-0 left-0 w-16 h-[2px] bg-[#1D8EE6]" />
+        <div className="h-[1px] bg-rose-100/60 relative">
+          <div className="absolute top-0 left-0 w-16 h-[2px] bg-[#C86D85]" />
         </div>
       </div>
 
       {/* Best selling products section */}
-      <section id="meilleurs-produits" className="py-16 bg-white">
+      <section id="meilleurs-produits" className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 flex flex-col items-center text-center">
-            <span className="text-[11px] font-bold text-[#1D8EE6] tracking-[0.2em] uppercase mb-3 animate-pulse">
+            <span className="text-[11px] font-bold text-[#C86D85] tracking-[0.2em] uppercase mb-3 animate-pulse">
               SÉLECTION PREMIUM
             </span>
             <div className="flex items-center justify-center w-full gap-4 sm:gap-8 group">
-              <div className="h-[2px] bg-gradient-to-r from-transparent via-[#1D8EE6]/50 to-[#1D8EE6] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight uppercase whitespace-nowrap text-black hover:scale-105 transition-transform duration-500">
+              <div className="h-[2px] bg-gradient-to-r from-transparent via-[#D88A9E]/50 to-[#D88A9E] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight uppercase whitespace-nowrap text-slate-800 hover:scale-105 transition-transform duration-500">
                 Meilleurs produits
               </h2>
-              <div className="h-[2px] bg-gradient-to-l from-transparent via-[#1D8EE6]/50 to-[#1D8EE6] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="h-[2px] bg-gradient-to-l from-transparent via-[#D88A9E]/50 to-[#D88A9E] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
             </div>
           </div>
 
-          {/* Horizontal Banner Image Slider */}
-          <div className="relative w-full h-48 sm:h-64 lg:h-80 mb-10 rounded-2xl overflow-hidden shadow-sm border border-slate-100 group">
-            {bestBannerImages.map((src, index) => (
-              <img
-                key={src}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-in-out"
-                alt={`Premium banner ${index + 1}`}
-                src={src}
-                loading="lazy"
-                decoding="async"
-                style={{
-                  opacity: index === bestBannerCurrent ? 1 : 0,
-                  transition: "opacity 0.8s ease-in-out",
-                  zIndex: index === bestBannerCurrent ? 1 : 0,
-                }}
-              />
-            ))}
-
-            {/* Points de navigation */}
-            {bestBannerImages.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2" style={{ zIndex: 10 }}>
-                {bestBannerImages.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setBestBannerCurrent(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === bestBannerCurrent ? "bg-white scale-125 shadow-sm" : "bg-white/40 hover:bg-white/60"
-                      }`}
-                  />
-                ))}
-              </div>
-            )}
-
-            {/* Flèches de navigation */}
-            {bestBannerImages.length > 1 && (
-              <>
-                <button
-                  onClick={() => setBestBannerCurrent((prev) => (prev - 1 + bestBannerImages.length) % bestBannerImages.length)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/25 hover:bg-black/45 text-white backdrop-blur-sm border border-white/10 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 opacity-100 transition-opacity duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
-                  aria-label="Slide précédent"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={() => setBestBannerCurrent((prev) => (prev + 1) % bestBannerImages.length)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/25 hover:bg-black/45 text-white backdrop-blur-sm border border-white/10 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 opacity-100 transition-opacity duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
-                  aria-label="Slide suivant"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              </>
-            )}
+          {/* Horizontal Banner Slider */}
+          <div className="relative w-full h-48 sm:h-64 lg:h-80 mb-10 rounded-2xl overflow-hidden shadow-sm border border-rose-100 group">
+            <img
+              src="/figmaAssets/brand/banners/cosmetic-1.jpg"
+              alt="Glow Store"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
@@ -1217,7 +1069,7 @@ export const Home = (): JSX.Element => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setBestPage((p) => Math.max(1, p - 1))}
-                    className="w-10 h-10 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg transition flex items-center justify-center"
+                    className="w-10 h-10 rounded-full bg-white border border-rose-100 shadow-md hover:shadow-lg transition flex items-center justify-center hover:text-[#C86D85]"
                     aria-label="Précédent"
                   >
                     <ChevronLeft className="w-5 h-5 text-slate-600" />
@@ -1225,7 +1077,7 @@ export const Home = (): JSX.Element => {
                   <span className="text-sm text-slate-600">{bestPage} / {Math.max(1, Math.ceil(bestSellingProducts.length / itemsPerPageBest))}</span>
                   <button
                     onClick={() => setBestPage((p) => Math.min(Math.max(1, Math.ceil(bestSellingProducts.length / itemsPerPageBest)), p + 1))}
-                    className="w-10 h-10 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg transition flex items-center justify-center"
+                    className="w-10 h-10 rounded-full bg-white border border-rose-100 shadow-md hover:shadow-lg transition flex items-center justify-center hover:text-[#C86D85]"
                     aria-label="Suivant"
                   >
                     <ChevronRight className="w-5 h-5 text-slate-600" />
@@ -1247,7 +1099,7 @@ export const Home = (): JSX.Element => {
                             : ""
                         }`}
                       >
-                    <Card className="bg-white rounded-2xl border border-slate-100/80 hover:border-[#1D8EE6]/20 hover:shadow-card transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] h-full flex flex-col overflow-hidden">
+                    <Card className="bg-white rounded-2xl border border-rose-100/70 hover:border-[#D88A9E]/30 hover:shadow-[0_10px_30px_rgba(216,138,158,0.15)] transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] h-full flex flex-col overflow-hidden">
                       <CardContent className="p-2.5 sm:p-4 flex flex-col h-full">
                         <div className="flex gap-1 mb-2 flex-wrap">
                           {(product.badges || []).map((badge, badgeIndex) => {
@@ -1257,7 +1109,7 @@ export const Home = (): JSX.Element => {
                                 key={badgeIndex}
                                 className={`h-5 px-1.5 text-[8px] sm:h-5.5 sm:px-2 sm:text-[9px] uppercase font-bold tracking-wider rounded-md border-0 shadow-none ${isPromo
                                   ? "bg-rose-50 text-rose-600 font-bold"
-                                  : "bg-blue-50 text-[#1D8EE6]"
+                                  : "bg-[#FDF0F3] text-[#C86D85]"
                                   }`}
                               >
                                 {badge}
@@ -1267,7 +1119,7 @@ export const Home = (): JSX.Element => {
                         </div>
 
                         {/* Image */}
-                        <Link to={`/detailsprod/${product.id}`} className="relative mb-2 flex-shrink-0 bg-gradient-to-b from-slate-50/80 to-slate-100/30 rounded-xl p-2 sm:p-4 flex items-center justify-center h-32 sm:h-44 overflow-hidden block">
+                        <Link to={`/detailsprod/${product.id}`} className="relative mb-2 flex-shrink-0 bg-gradient-to-b from-[#FFF5F6] to-white rounded-xl p-2 sm:p-4 flex items-center justify-center h-32 sm:h-44 overflow-hidden block">
                           <img
                             className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]"
                             alt={product.name}
@@ -1287,7 +1139,7 @@ export const Home = (): JSX.Element => {
 
                         {/* Name */}
                         <Link to={`/detailsprod/${product.id}`} className="block">
-                          <h3 className="font-semibold text-slate-700 text-xs sm:text-sm mb-2 line-clamp-2 hover:text-[#1D8EE6] transition-colors h-8 sm:h-10">
+                          <h3 className="font-semibold text-slate-700 text-xs sm:text-sm mb-2 line-clamp-2 hover:text-[#C86D85] transition-colors h-8 sm:h-10">
                             {product.name}
                           </h3>
                         </Link>
@@ -1296,14 +1148,14 @@ export const Home = (): JSX.Element => {
                           {(product.categories || []).map((category, catIndex) => (
                             <span
                               key={catIndex}
-                              className="inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-[#F0F7FF] text-[#1D8EE6] rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest border border-[#1D8EE6]/20 shadow-sm"
+                              className="inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-[#FDF0F3] text-[#C86D85] rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest border border-[#F8D7DF] shadow-sm"
                             >
                               {category}
                             </span>
                           ))}
                         </div>
 
-                        <div className="mt-auto pt-3 border-t border-slate-100 flex flex-col gap-2">
+                        <div className="mt-auto pt-3 border-t border-rose-100/60 flex flex-col gap-2">
                           <div className="flex flex-col">
                             {product.originalPrice &&
                               product.price &&
@@ -1312,7 +1164,7 @@ export const Home = (): JSX.Element => {
                                   {Number(product.originalPrice).toFixed(3)}&nbsp;DT
                                 </span>
                               )}
-                            <span className="font-extrabold text-[#1D8EE6] text-sm sm:text-base leading-none whitespace-nowrap">
+                            <span className="font-extrabold text-[#C86D85] text-sm sm:text-base leading-none whitespace-nowrap">
                               {Number(
                                 product.price && Number(product.price) > 0
                                   ? product.price
@@ -1322,10 +1174,10 @@ export const Home = (): JSX.Element => {
                             </span>
                           </div>
                           <div className="flex items-center justify-between gap-1.5">
-                            <div className="flex items-center bg-slate-50 border border-slate-200/60 rounded-lg p-0.5 shadow-sm">
+                            <div className="flex items-center bg-rose-50/40 border border-rose-100 rounded-lg p-0.5 shadow-sm">
                               <button
                                 onClick={(e) => { e.preventDefault(); changeQty(product.id, -1); }}
-                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                               >−</button>
                               <span className="w-6 text-center text-[10px] sm:text-xs font-semibold text-slate-700">{getQty(product.id)}</span>
                               <button
@@ -1333,7 +1185,7 @@ export const Home = (): JSX.Element => {
                                   e.preventDefault();
                                   const stockVal = product.form !== null && product.form !== undefined && product.form !== ""
                                     ? Number(product.form) : null;
-                                  const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+                                  const maxOrderable = stockVal !== null ? stockVal : null;
                                   if (maxOrderable !== null && getQty(product.id) + 1 > maxOrderable) {
                                     toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
                                       style: { borderRadius: "10px", background: "#333", color: "#fff" },
@@ -1342,12 +1194,12 @@ export const Home = (): JSX.Element => {
                                   }
                                   changeQty(product.id, 1);
                                 }}
-                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                               >+</button>
                             </div>
                             <button
                               onClick={(e) => { e.preventDefault(); handleAddToCart(product, getQty(product.id)); }}
-                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#1D8EE6] to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(29,142,230,0.2)] hover:shadow-[0_6px_15px_rgba(29,142,230,0.3)] hover:-translate-y-0.5 overflow-hidden"
+                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#D88A9E] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(216,138,158,0.25)] hover:shadow-[0_6px_15px_rgba(216,138,158,0.35)] hover:-translate-y-0.5 overflow-hidden"
                             >
                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                               <div className="flex items-center gap-1 relative z-10">
@@ -1372,116 +1224,54 @@ export const Home = (): JSX.Element => {
       </section>
 
       {/* Large promotional banner */}
-      <section className="py-8 bg-white w-full">
-        <div className="w-full overflow-hidden">
-          <img
-            className="w-full h-auto object-cover"
-            alt="Large promotional banner"
-            src="/figmaAssets/rectangle-143.png"
-            loading="lazy"
-            decoding="async"
-          />
+      <section className="py-8 w-full bg-gradient-to-b from-[#FFF5F6] to-transparent">
+        <div className="relative w-full flex flex-col items-center justify-center text-center px-6 py-16 md:py-24 overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7ED] via-[#FDF1F0] to-[#FBEAF1] shadow-[0_15px_35px_rgba(216,138,158,0.12)] border border-[#F8D7DF]/60">
+          <div className="absolute -top-16 -left-16 w-64 h-64 rounded-full bg-[#F3D9E4]/60 blur-3xl" />
+          <div className="absolute -bottom-16 -right-10 w-56 h-56 rounded-full bg-[#FAD6E3]/60 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-white/40 blur-3xl" />
+
+          <div className="relative w-11 h-11 rounded-full bg-white/90 shadow-sm flex items-center justify-center mb-5 border border-rose-100">
+            <Sparkles className="w-5 h-5 text-[#C86D85]" />
+          </div>
+
+          <div className="relative flex items-center gap-3 mb-4">
+            <span className="w-8 h-px bg-[#D88A9E]/50" />
+            <span className="text-[10px] tracking-[0.3em] uppercase text-[#C86D85] font-semibold">Glow Store</span>
+            <span className="w-8 h-px bg-[#D88A9E]/50" />
+          </div>
+
+          <h2 className="relative font-['Playfair_Display',serif] italic text-slate-800 text-2xl md:text-4xl mb-4">
+            Une routine beauté sur mesure
+          </h2>
+          <p className="relative text-slate-500 text-sm md:text-base max-w-md">
+            Des soins cosmétiques choisis avec soin pour révéler votre éclat naturel.
+          </p>
         </div>
       </section>
 
       {/* Divider */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6">
-        <div className="h-[1px] bg-slate-100 relative">
-          <div className="absolute top-0 left-0 w-16 h-[2px] bg-[#1D8EE6]" />
-        </div>
-      </div>
-
-      {/* Brand logos section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 flex flex-col items-center text-center">
-            <span className="text-[11px] font-bold text-[#1D8EE6] tracking-[0.2em] uppercase mb-3 animate-pulse">
-              NOS PARTENAIRES
-            </span>
-            <div className="flex items-center justify-center w-full gap-4 sm:gap-8 group">
-              <div className="h-[2px] bg-gradient-to-r from-transparent via-[#1D8EE6]/50 to-[#1D8EE6] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight uppercase whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-slate-800 via-[#1D8EE6] to-slate-800 animate-gradient-x hover:scale-105 transition-transform duration-500">
-                Marques populaires
-              </h2>
-              <div className="h-[2px] bg-gradient-to-l from-transparent via-[#1D8EE6]/50 to-[#1D8EE6] flex-1 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-700"></div>
-            </div>
-          </div>
-
-          <div className="relative group/brand-slider w-full mx-auto">
-            {/* Left Arrow Button */}
-            <button
-              onClick={() => {
-                brandScrollRef.current?.scrollBy({ left: -260, behavior: "smooth" });
-              }}
-              className="absolute left-0 md:-left-12 top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#1D8EE6] focus:outline-none cursor-pointer"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-
-            {/* Right Arrow Button */}
-            <button
-              onClick={() => {
-                brandScrollRef.current?.scrollBy({ left: 260, behavior: "smooth" });
-              }}
-              className="absolute right-0 md:-right-12 top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#1D8EE6] focus:outline-none cursor-pointer"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-
-            <div
-              ref={brandScrollRef}
-              className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide cursor-grab active:cursor-grabbing scroll-smooth px-10 md:px-0"
-              onMouseDown={handleMouseDownBrand}
-              onMouseLeave={handleMouseLeaveOrUpBrand}
-              onMouseUp={handleMouseLeaveOrUpBrand}
-              onMouseMove={handleMouseMoveBrand}
-              onTouchStart={handleTouchStartBrand}
-              onTouchEnd={handleMouseLeaveOrUpBrand}
-              onTouchMove={handleTouchMoveBrand}
-            >
-              {brandLogos.map((brand, index) => (
-                <Card key={index} className="bg-white rounded-2xl border border-slate-100/80 hover:border-[#1D8EE6]/20 aspect-square w-40 sm:w-48 md:w-52 flex-shrink-0 hover:shadow-card hover:-translate-y-1.5 transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)]">
-                  <CardContent className="p-6 h-full flex items-center justify-center">
-                    <img
-                      className="max-w-full max-h-full object-contain transition-all duration-300"
-                      alt="Brand logo"
-                      src={brand.image}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Divider */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6">
-        <div className="h-[1px] bg-slate-100 relative">
-          <div className="absolute top-0 left-0 w-16 h-[2px] bg-[#1D8EE6]" />
+        <div className="h-[1px] bg-rose-100/60 relative">
+          <div className="absolute top-0 left-0 w-16 h-[2px] bg-[#C86D85]" />
         </div>
       </div>
 
       {/* Service features */}
-      <section className="py-20 bg-gray-100 border-t border-slate-200/50">
+      <section className="py-20 bg-[#FDF5F6]/60 border-t border-rose-100/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {serviceFeatures.map((feature, index) => (
               <Link key={index} to={feature.link} className="block cursor-pointer">
-                <Card className="bg-white rounded-2xl border border-slate-100/80 hover:shadow-card hover:border-[#1D8EE6]/15 hover:-translate-y-1 transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] group h-full">
+                <Card className="bg-white/90 backdrop-blur-sm rounded-2xl border border-rose-100/80 hover:shadow-card hover:border-[#D88A9E]/30 hover:-translate-y-1 transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] group h-full">
                   <CardContent className="p-7 sm:p-8 flex items-center space-x-5 sm:space-x-6 h-full">
                     <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 shadow-sm ${feature.bgClass}`}>
                       <feature.icon
-                        className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 group-hover:scale-110"
+                        className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 group-hover:scale-110 text-[#C86D85]"
                       />
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-slate-800 text-base sm:text-lg mb-2 group-hover:text-[#1D8EE6] transition-colors leading-snug">
+                      <h3 className="font-bold text-slate-800 text-base sm:text-lg mb-2 group-hover:text-[#C86D85] transition-colors leading-snug">
                         {feature.title}
                       </h3>
                       <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">

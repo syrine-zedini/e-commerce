@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Search, Eye, CheckCircle, Clock, XCircle, Trash2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Edit, Save, FileText } from 'lucide-react';
 import { apiGet, apiPut, apiDelete } from '@/lib/api';
 import { addToDeletedOrders } from './DeletedOrdersManagement';
-import { FirstDeliveryIntegration } from '@/components/FirstDeliveryIntegration';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import axios from 'axios';
@@ -29,8 +28,6 @@ interface Order {
   created_at: string;
   statut: string;
   phone: string;
-  first_delivery_barcode?: string | null;
-  first_delivery_status?: string | null;
 }
 
 interface OrderManagementProps {
@@ -139,7 +136,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
       ? 0
       : sousTotal >= 69
       ? 0
-      : 7.2;
+      : 7;
 
     const total = sousTotal + fraisLivraison;
 
@@ -252,7 +249,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
     if (delta > 0) {
       const prod = allProducts.find(ap => String(ap.id) === String(productId));
       const stockVal = prod?.form != null && prod.form !== "" ? Number(prod.form) : null;
-      const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal - 3 : null;
+      const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal : null;
       const current = editForm.produits.find(p => String(p.id) === String(productId));
       const currentQty = current?.quantity ?? 0;
       if (maxOrderable !== null && currentQty + delta > maxOrderable) {
@@ -283,7 +280,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
 
     // ── Logo ──
     try {
-      const res = await fetch('/figmaAssets/logo YJPARA.jpeg');
+      const res = await fetch('/figmaAssets/brand/glow-store-logo.jpeg');
       const blob = await res.blob();
       const reader = new FileReader();
       await new Promise<void>((resolve) => {
@@ -301,7 +298,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
     // ── En-tête ──
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(22);
-    doc.setTextColor(29, 142, 230);
+    doc.setTextColor(184, 134, 11);
     doc.text('FACTURE', pageW - 14, 20, { align: 'right' });
 
     doc.setFontSize(9);
@@ -311,7 +308,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
     doc.text(`N° commande : ${order.id}`, pageW - 14, 32, { align: 'right' });
 
     // ── Ligne séparatrice ──
-    doc.setDrawColor(29, 142, 230);
+    doc.setDrawColor(184, 134, 11);
     doc.setLineWidth(0.5);
     doc.line(14, 34, pageW - 14, 34);
 
@@ -359,7 +356,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
       startY: y,
       head: [['Produit', 'Qte', 'Prix HT', 'TVA (taux - montant)', 'Prix TTC', 'Total TTC']],
       body: rows,
-      headStyles: { fillColor: [29, 142, 230], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+      headStyles: { fillColor: [184, 134, 11], textColor: 255, fontStyle: 'bold', fontSize: 8 },
       bodyStyles: { fontSize: 7.5, textColor: 50 },
       alternateRowStyles: { fillColor: [240, 247, 255] },
       columnStyles: {
@@ -400,7 +397,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(11);
-    doc.setTextColor(29, 142, 230);
+    doc.setTextColor(184, 134, 11);
     doc.text(`Total TTC : ${total.toFixed(3)} TND`, pageW - 14, finalY + 21, { align: 'right' });
 
     // ── Pied de page ──
@@ -1223,19 +1220,6 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({ initialOrderId
                 </ul>
               </div>
 
-              {/* First Delivery */}
-              {selectedOrder.statut === 'confirmed' && (
-                <div className="border-t border-gray-200 pt-4">
-                  <FirstDeliveryIntegration
-                    orderId={selectedOrder.id}
-                    initialBarCode={selectedOrder.first_delivery_barcode}
-                    initialStatus={selectedOrder.first_delivery_status}
-                    onOrderCreated={(barCode, link) => {
-                      console.log('Order created on First Delivery:', { barCode, link });
-                    }}
-                  />
-                </div>
-              )}
             </div>
           </div>
         </div>

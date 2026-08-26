@@ -58,7 +58,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBack }
         </button>
 
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#1D8EE6] rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-[#C86D85] rounded-full flex items-center justify-center mx-auto mb-4">
             <Mail className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900">Forgot Password?</h2>
@@ -78,7 +78,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBack }
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
                 placeholder="Enter your email"
                 required
               />
@@ -94,7 +94,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onBack }
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-[#1D8EE6] to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-[#1D8EE6] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(29,142,230,0.3)]"
+            className="w-full bg-gradient-to-r from-[#C86D85] to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-[#C86D85] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(216,138,158,0.3)]"
           >
             {isLoading ? 'Sending...' : 'Send Reset Link'}
           </button>

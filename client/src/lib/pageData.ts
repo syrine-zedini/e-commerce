@@ -17,7 +17,7 @@ export const SERVICE_FEATURES = [
     title: "Produits certifiés",
     description: "Nos articles respectent des normes de qualité strictes.",
     link: "/propos",
-    bgClass: "bg-amber-50/80 text-amber-600 group-hover:bg-amber-600 group-hover:text-white group-hover:shadow-[0_10px_20px_-5px_rgba(217,119,6,0.3)]",
+    bgClass: "bg-rose-50/80 text-rose-600 group-hover:bg-rose-600 group-hover:text-white group-hover:shadow-[0_10px_20px_-5px_rgba(217,119,6,0.3)]",
   },
   {
     icon: Zap,
@@ -51,9 +51,7 @@ export const NAVIGATION_ITEMS = [
 // Same 3 links used as both the desktop Header's `headerLinks` prop and the
 // mobile MobileHeader's `navLinks` prop.
 export const HEADER_LINKS = [
-  { name: "À Propos", href: "/propos" },
   { name: "Produits", href: "/products" },
-  { name: "Contact", href: "/contact" },
 ];
 
 // Canonical footer data (desktop `Footer` shape). Mobile's `FooterMobile`
@@ -63,9 +61,7 @@ export const FOOTER_SECTIONS = [
   {
     title: "INFORMATIONS",
     links: [
-      { name: "À Propos", href: "/propos" },
       { name: "Produits", href: "/products" },
-      { name: "Contact", href: "/contact" },
     ],
   },
   {
@@ -108,12 +104,6 @@ export const FOOTER_TITLE_LINKS: Record<string, string> = {
   "NEWSLETTRES": "/contact",
 };
 
-export const GALLERY_FALLBACK_IMAGES = [
-  "/figmaAssets/para/image3.webp",
-  "/figmaAssets/para/image2.jpeg",
-  "/figmaAssets/para/image1.png",
-];
-
 // ---------------------------------------------------------------------
 // A second, "extended" nav/footer set shared identically by ConseilsSant,
 // DetailconseilsSant and Marques (desktop) and their mobile counterparts —
@@ -141,12 +131,7 @@ export const FOOTER_SECTIONS_EXTENDED = [
   {
     title: "INFORMATIONS",
     links: [
-      { name: "À Propos", href: "/propos" },
       { name: "Produits", href: "/products" },
-      { name: "Conseils & santé", href: "/conseils" },
-      { name: "Marques", href: "/marques" },
-      { name: "Contact", href: "/contact" },
-      { name: "Livraison", href: "/livraison" },
     ],
   },
   {
@@ -177,8 +162,8 @@ export const FOOTER_SECTIONS_EXTENDED = [
 export const FOOTER_SECTIONS_EXTENDED_MOBILE = [
   {
     title: "INFORMATIONS",
-    items: ["À Propos", "Produits", "Conseils & santé", "Marques", "Contact", "Livraison"],
-    routeLinks: ["/propos", "/products", "/conseils", "/marques", "/contact", "/checkout"],
+    items: ["Produits"],
+    routeLinks: ["/products"],
   },
   {
     title: "PRODUITS",

@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { and, asc, desc, eq, gt, inArray, isNotNull, ne } from "drizzle-orm";
 import { getDb } from "../db";
-import { products } from "@shared/schema";
+import { products, promotionProducts, productReviews, wishlist } from "@shared/schema";
 import { asyncHandler } from "../lib/asyncHandler";
 import { pickFields, inputToSet } from "../lib/queryHelpers";
 
@@ -53,10 +53,6 @@ export function registerProductRoutes(app: Express) {
       conditions.push(isNotNull(products.originalPrice));
       conditions.push(gt(products.originalPrice, "0"));
     }
-    if (q.tvaOnly === "1") {
-      conditions.push(isNotNull(products.tva));
-      conditions.push(ne(products.tva, "0"));
-    }
     if (q.withImageOnly === "1") {
       conditions.push(isNotNull(products.imagePath));
       conditions.push(ne(products.imagePath, ""));
@@ -103,7 +99,11 @@ export function registerProductRoutes(app: Express) {
   }));
 
   app.delete("/api/products/:id", asyncHandler(async (req, res) => {
-    await getDb().delete(products).where(eq(products.id, Number(req.params.id)));
+    const productId = Number(req.params.id);
+    await getDb().delete(promotionProducts).where(eq(promotionProducts.productId, productId));
+    await getDb().delete(productReviews).where(eq(productReviews.productId, productId));
+    await getDb().delete(wishlist).where(eq(wishlist.productId, productId));
+    await getDb().delete(products).where(eq(products.id, productId));
     res.json({ success: true });
   }));
 }

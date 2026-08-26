@@ -124,9 +124,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onOrderClick }) => {
         const stockNum = product.form !== null && product.form !== undefined && product.form !== ""
           ? Number(product.form)
           : null;
-        const isLowStock = stockNum !== null && stockNum <= 3;
+        const isOutOfStockStock = stockNum !== null && stockNum <= 0;
         const isOutOfStockStatus = String(product.stock_status ?? "en stock").trim().toLowerCase() === "en rupture de stock";
-        return isLowStock || isOutOfStockStatus;
+        return isOutOfStockStock || isOutOfStockStatus;
       }).length;
 
       setKpis({ revenue: totalRevenue, totalOrders, criticalStock });

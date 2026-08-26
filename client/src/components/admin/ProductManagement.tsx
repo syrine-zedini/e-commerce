@@ -48,7 +48,7 @@ const getStock = (product: Product | null | undefined): number | null => {
 
 const isOutOfStock = (product: Product | null | undefined): boolean =>
   normalizeStockStatus(product?.stock_status) === "en rupture de stock" ||
-  (getStock(product) !== null && (getStock(product) as number) <= 3);
+  (getStock(product) !== null && (getStock(product) as number) <= 0);
 
 const PLACEHOLDER_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23f3f4f6'/></svg>";
 
@@ -122,7 +122,7 @@ export const ProductManagement: React.FC = () => {
     if (filterInStock) {
       if (normalizeStockStatus(p.stock_status) !== "en stock") return false;
       const stock = getStock(p);
-      if (stock !== null && stock <= 3) return false;
+      if (stock !== null && stock <= 0) return false;
     }
     if (searchTerm.trim() && !p.name?.toLowerCase().includes(searchTerm.trim().toLowerCase())) return false;
     return true;
@@ -259,7 +259,7 @@ export const ProductManagement: React.FC = () => {
 
       const stockValue = formData.stock !== "" ? formData.stock.toString() : null;
       const stockNum = stockValue !== null ? Number(stockValue) : null;
-      const autoOutOfStock = stockNum !== null && stockNum <= 3;
+      const autoOutOfStock = stockNum !== null && stockNum <= 0;
 
       const payload: any = {
         name: formData.name,
@@ -382,9 +382,11 @@ export const ProductManagement: React.FC = () => {
         }
       }
 
+      toast.success("Produit supprimé avec succès !");
       refreshCurrentPage();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error deleting product:", err);
+      toast.error(`Erreur : ${err?.message || "Erreur lors de la suppression du produit"}`);
     }
   };
 
@@ -504,7 +506,7 @@ export const ProductManagement: React.FC = () => {
             <div
               key={product.id}
               className={`border rounded-lg p-4 shadow-sm relative transition ${
-                isOutOfStock(product) || product?.tva == null || Number(product?.tva) === 0 ? "bg-gray-100 opacity-60 grayscale" : "bg-white"
+                isOutOfStock(product) ? "bg-gray-100 opacity-60 grayscale" : "bg-white"
               }`}
             >
               {/* No image badge */}
@@ -542,12 +544,6 @@ export const ProductManagement: React.FC = () => {
               {isOutOfStock(product) && (
                 <span className="inline-block mt-2 rounded-full bg-gray-800 px-3 py-1 text-xs font-semibold text-white">
                   Out of stock
-                </span>
-              )}
-
-              {(product.tva == null || Number(product.tva) === 0) && (
-                <span className="inline-block mt-2 rounded-full bg-orange-500 px-3 py-1 text-xs font-semibold text-white">
-                  TVA 0% — Non affiché
                 </span>
               )}
 
@@ -642,18 +638,18 @@ export const ProductManagement: React.FC = () => {
                       setFormData((p: any) => ({
                         ...p,
                         outOfStock: checked,
-                        stock: checked ? "0" : (Number(p.stock) <= 3 || p.stock === "" ? "10" : p.stock)
+                        stock: checked ? "0" : (Number(p.stock) <= 0 || p.stock === "" ? "10" : p.stock)
                       }));
                     }} />
                   Out of stock
                 </label>
               </div>
 
-              <input type="number" placeholder="Quantité en stock (≤3 = Out of stock)" value={formData.stock}
+              <input type="number" placeholder="Quantité en stock (0 = Out of stock)" value={formData.stock}
                 onChange={(e) => {
                   const val = e.target.value;
                   const stockNum = val !== "" ? Number(val) : null;
-                  const isOut = stockNum !== null && stockNum <= 3;
+                  const isOut = stockNum !== null && stockNum <= 0;
                   setFormData((p: any) => ({
                     ...p,
                     stock: val,
@@ -666,7 +662,7 @@ export const ProductManagement: React.FC = () => {
                 onChange={(e) => setFormData((p: any) => ({ ...p, originalPrice: e.target.value }))}
                 className="w-full border px-3 py-2 rounded" required />
 
-              <input type="number" placeholder="Taux TVA (ex: 19, 7, 0)" value={formData.tva}
+              <input type="number" placeholder="Taux TVA (ex: 19, 13, 7, 0)" value={formData.tva}
                 onChange={(e) => setFormData((p: any) => ({ ...p, tva: e.target.value }))}
                 className="w-full border px-3 py-2 rounded" min="0" max="100" step="1" />
 

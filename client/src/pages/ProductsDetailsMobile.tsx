@@ -47,7 +47,7 @@ const showToast = (message: string) => {
   } else {
     toast.success(message, {
       style: { borderRadius: '10px', background: '#fff', color: '#333', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' },
-      iconTheme: { primary: '#1D8EE6', secondary: '#fff' }
+      iconTheme: { primary: '#C86D85', secondary: '#fff' }
     });
   }
 };
@@ -282,7 +282,7 @@ const addToCart = (product: any, qty: number = 1) => {
   {!!(product.original_price &&
     product.discounted_price &&
     product.discounted_price < product.original_price) && (
-      <span className="line-through decoration-[#1D8EE6]/60 decoration-[1.5px] text-[#b3b3b3] text-lg sm:text-xl lg:text-2xl">
+      <span className="line-through decoration-[#C86D85]/60 decoration-[1.5px] text-[#b3b3b3] text-lg sm:text-xl lg:text-2xl">
         {product.original_price} TND
       </span>
     )}
@@ -341,7 +341,7 @@ const addToCart = (product: any, qty: number = 1) => {
             onClick={() => {
               if (product) {
                 const stockVal = product.form !== null && product.form !== undefined && product.form !== "" ? Number(product.form) : null;
-                const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+                const maxOrderable = stockVal !== null ? stockVal : null;
                 if (maxOrderable !== null && selectedQuantity + 1 > maxOrderable) {
                   toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
                     style: { borderRadius: '10px', background: '#333', color: '#fff' }
@@ -397,7 +397,7 @@ const addToCart = (product: any, qty: number = 1) => {
             localStorage.setItem("checkoutCart", JSON.stringify(savedCart));
             navigate("/checkout");
           }}
-          className="bg-[#1D8EE6] hover:bg-blue-600 rounded-[30px] text-white font-bold flex items-center justify-center gap-2 w-full sm:w-auto shadow-md"
+          className="bg-[#C86D85] hover:bg-[#C86D85] rounded-[30px] text-white font-bold flex items-center justify-center gap-2 w-full sm:w-auto shadow-md"
         >
           <ShoppingBag className="w-5 h-5" />
           COMMANDER MAINTENANT
@@ -422,7 +422,7 @@ const addToCart = (product: any, qty: number = 1) => {
       {/* Trust badges */}
       <div className="grid grid-cols-2 gap-2.5 pt-4">
         {[
-          { icon: Truck, title: "Livraison rapide", desc: "Partout en Tunisie", color: "#1D8EE6", bg: "#EBF5FF" },
+          { icon: Truck, title: "Livraison rapide", desc: "Partout en Tunisie", color: "#C86D85", bg: "#EBF5FF" },
           { icon: ShieldCheck, title: "Produits authentiques", desc: "Garantie d'origine", color: "#10b981", bg: "#ecfdf5" },
           { icon: Lock, title: "Procéder au paiement", desc: "100% protégé", color: "#f59e0b", bg: "#fffbeb" },
           { icon: RotateCcw, title: "Retours faciles", desc: "Sous 14 jours", color: "#8b5cf6", bg: "#f5f3ff" },
@@ -492,7 +492,7 @@ const addToCart = (product: any, qty: number = 1) => {
   {prod.original_price &&
     prod.discounted_price &&
     prod.discounted_price < prod.original_price && (
-      <span className="font-extrabold text-[#b3b3b3] text-xs sm:text-sm line-through decoration-[#1D8EE6]/60 decoration-[1.5px]">
+      <span className="font-extrabold text-[#b3b3b3] text-xs sm:text-sm line-through decoration-[#C86D85]/60 decoration-[1.5px]">
         {prod.original_price} TND
       </span>
     )}

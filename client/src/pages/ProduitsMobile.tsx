@@ -156,7 +156,7 @@ const { currentPage, currentItems: paginatedProducts, totalPages, goToPage, getP
 
 const addToCart = (product: Product | any, qty: number = 1) => {
   const stockVal = product.form != null && product.form !== "" ? Number(product.form) : null;
-  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal - 3 : null;
+  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal : null;
   const exists = cart.find((item) => item.id === product.id);
   const currentInCart = exists ? (exists.quantity || 1) : 0;
   if (maxOrderable !== null && currentInCart + qty > maxOrderable) {
@@ -198,19 +198,12 @@ const addToCart = (product: Product | any, qty: number = 1) => {
         <MobileHeader navLinks={navLinks} />
 
         {/* Hero Section */}
-        <div
-          className="relative w-full h-40 bg-cover bg-center"
-          style={{ backgroundImage: "url(/figmaAssets/productsm/rectangle-230.png)" }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-app-secondary to-transparent" />
-          <div className="absolute bottom-6 left-3">
-            <h1 className="text-text-light text-[21px] font-bold [font-family:'Inter',Helvetica] mb-2">
-              Produits
-            </h1>
-            <div className="text-text-light text-xs font-medium [font-family:'Inter',Helvetica]">
-              Accueil &gt; Produits
-            </div>
-          </div>
+        <div className="relative w-full h-40 overflow-hidden">
+          <img
+            src="/figmaAssets/brand/banners/cosmetic-2.jpg"
+            alt="Glow Store"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         </div>
 
         {/* Categories */}
@@ -243,8 +236,8 @@ const addToCart = (product: Product | any, qty: number = 1) => {
             onError={onImgError}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-            <span className="text-xl font-black text-[#1D8EE6] uppercase select-none">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100">
+            <span className="text-xl font-black text-[#C86D85] uppercase select-none">
               {category.name.charAt(0)}
             </span>
           </div>
@@ -330,7 +323,7 @@ const addToCart = (product: Product | any, qty: number = 1) => {
             style={{ paddingRight: searchQuery.trim().length > 0 ? "70px" : "40px" }}
           />
           {searchQuery.trim().length > 0 && (
-            <span className="absolute right-10 top-1/2 transform -translate-y-1/2 text-xs font-bold text-app-primary bg-blue-50 px-2.5 py-0.5 rounded-full pointer-events-none">
+            <span className="absolute right-10 top-1/2 transform -translate-y-1/2 text-xs font-bold text-app-primary bg-rose-50 px-2.5 py-0.5 rounded-full pointer-events-none">
               {filteredProducts.length}
             </span>
           )}
@@ -406,12 +399,12 @@ const addToCart = (product: Product | any, qty: number = 1) => {
     <div className="flex items-center bg-slate-50 border border-slate-200/60 rounded-lg p-0.5 shadow-sm" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
       <button
         onClick={(e) => { e.stopPropagation(); e.preventDefault(); changeQty(product.id, -1); }}
-        className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+        className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
       >−</button>
       <span className="w-6 text-center text-[10px] font-semibold text-slate-700">{getQty(product.id)}</span>
       <button
         onClick={(e) => { e.stopPropagation(); e.preventDefault(); changeQty(product.id, 1); }}
-        className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+        className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
       >+</button>
     </div>
     <button
@@ -424,7 +417,7 @@ const addToCart = (product: Product | any, qty: number = 1) => {
           discounted_price: Number(product.discounted_price) || 0,
         }, getQty(product.id));
       }}
-      className="relative flex-1 group/btn h-[32px] bg-gradient-to-r from-[#1D8EE6] to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(29,142,230,0.15)] overflow-hidden"
+      className="relative flex-1 group/btn h-[32px] bg-gradient-to-r from-[#C86D85] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(216,138,158,0.15)] overflow-hidden"
     >
       <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
       <div className="flex items-center gap-1 relative z-10">
@@ -457,7 +450,7 @@ const addToCart = (product: Product | any, qty: number = 1) => {
                   <button key={page} onClick={() => goToPage(page as number)}
                     className={`w-8 h-8 rounded-full text-xs font-semibold transition ${
                       currentPage === page
-                        ? "bg-[#1D8EE6] text-white shadow"
+                        ? "bg-[#C86D85] text-white shadow"
                         : "hover:bg-slate-100 text-slate-700"
                     }`}
                   >{page}</button>

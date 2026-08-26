@@ -281,9 +281,9 @@ export const DeletedOrdersManagement: React.FC = () => {
       </div>
 
       {/* Info banner */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-        <div className="text-sm text-amber-800">
+      <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 flex items-start gap-3">
+        <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+        <div className="text-sm text-rose-800">
           <p className="font-semibold mb-1">Commandes dans la corbeille</p>
           <p>Ces commandes ont été supprimées de la liste principale. Vous pouvez les <strong>restaurer</strong> pour les réinsérer dans la base de données, ou les <strong>supprimer définitivement</strong>.</p>
         </div>

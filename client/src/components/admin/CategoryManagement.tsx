@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Search, Loader2 } from 'lucide-react';
 import { apiGet, apiPost, apiPut, apiDelete, uploadStorage } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 interface Category {
   id: number;
@@ -60,7 +61,11 @@ const saveCategory = useMutation({
         return [newCategory, ...old];
       }
     });
+    toast.success(editingCategory ? 'Catégorie mise à jour !' : 'Catégorie ajoutée !');
     resetForm();
+  },
+  onError: (err: any) => {
+    toast.error(`Erreur : ${err?.message || 'Action impossible'}`);
   },
 });
 
@@ -72,8 +77,12 @@ const deleteCategory = useMutation({
   },
   onSuccess: (id) => {
     queryClient.setQueryData(['categories'], (old: any) =>
-      old.filter((c: Category) => c.id !== id)
+      old ? old.filter((c: Category) => c.id !== id) : []
     );
+    toast.success('Catégorie supprimée avec succès !');
+  },
+  onError: (err: any) => {
+    toast.error(`Erreur : ${err?.message || 'Erreur lors de la suppression de la catégorie'}`);
   },
 });
 

@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { eq } from "drizzle-orm";
 import { getDb } from "../db";
-import { categories } from "@shared/schema";
+import { categories, products } from "@shared/schema";
 import { asyncHandler } from "../lib/asyncHandler";
 
 const categorySelect = {
@@ -33,7 +33,9 @@ export function registerCategoryRoutes(app: Express) {
   }));
 
   app.delete("/api/categories/:id", asyncHandler(async (req, res) => {
-    await getDb().delete(categories).where(eq(categories.id, Number(req.params.id)));
+    const categoryId = Number(req.params.id);
+    await getDb().update(products).set({ categoryId: null }).where(eq(products.categoryId, categoryId));
+    await getDb().delete(categories).where(eq(categories.id, categoryId));
     res.json({ success: true });
   }));
 }

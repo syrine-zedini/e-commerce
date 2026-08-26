@@ -3,66 +3,66 @@
 @tailwind utilities;
 
 /* ===================================================================
-   YJ PARA — Premium Design System
-   Clean & Premium aesthetic inspired by luxury cosmetics & pharmacy
+   Glow Store — Premium Design System
+   Elegant gold-on-light aesthetic inspired by luxury cosmetics
    =================================================================== */
 
 @layer base {
   :root {
-    /* ─── YJ PARA Brand Palette ─── */
-    --yj-blue: 209 80% 51%;        /* #1D8EE6 */
-    --yj-blue-light: 209 90% 96%;  /* soft blue tint */
+    /* ─── Brand Palette (Glow Store — Feminine Blush & Rose Gold) ─── */
+    --yj-blue: 344 54% 70%;         /* #D88A9E Rose Gold */
+    --yj-blue-light: 350 70% 96%;   /* soft blush pink tint */
     --yj-blue-deep: 222 47% 11%;   /* #1E293B deep navy */
-    --yj-gold: 40 70% 56%;         /* subtle gold accent */
-    
+    --yj-gold: 344 55% 63%;         /* #C86D85 elegant rose gold accent */
+
     /* ─── App-level custom vars ─── */
-    --accent-soft-lavender: 204 100% 94%;  /* #E0F2FE Sky 100 */
-    --accent-soft-teal: 210 20% 96%;       /* #F1F5F9 Slate 100 */
-    --app-primary: 209 80% 51%;            /* #1D8EE6 Elegant Blue */
+    --accent-soft-lavender: 350 70% 96%;    /* soft blush tint */
+    --accent-soft-teal: 345 40% 97%;       /* soft nude tint */
+    --app-primary: 344 55% 63%;             /* #C86D85 Feminine Rose Gold */
     --app-secondary: 222 47% 11%;          /* #0F172A Slate 900 */
     --card-background: 0 0% 100%;          /* white */
     --error: 0 84% 60%;                    /* red-500 */
-    --light-background: 210 40% 98%;       /* #F8FAFC Slate 50 */
+    --light-background: 350 50% 98%;       /* #FDF5F6 Blush Slate */
     --text-dark: 215 25% 17%;             /* #1E293B blueish anthracite */
     --text-light: 0 0% 100%;              /* white */
 
     /* ─── ShadCN / Radix Design Tokens ─── */
-    --background: 0 0% 100%;
+    --background: 350 60% 99%;
     --foreground: 222 47% 11%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 350 40% 96.1%;
     --muted-foreground: 215 16% 47%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --border: 345 30% 92%;
+    --input: 345 30% 92%;
 
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
 
-    --primary: 209 80% 51%;
+    --primary: 344 55% 63%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
+    --secondary: 350 40% 96%;
     --secondary-foreground: 222 47% 11%;
 
-    --accent: 210 40% 96%;
+    --accent: 350 40% 96%;
     --accent-foreground: 222 47% 11%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --ring: 209 80% 51%;
+    --ring: 344 55% 63%;
 
     --radius: 0.75rem;
 
     /* ─── Premium Shadows ─── */
-    --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.05), 0 2px 6px -4px rgba(0, 0, 0, 0.03);
-    --shadow-card: 0 4px 20px -5px rgba(0, 0, 0, 0.06), 0 2px 8px -4px rgba(0, 0, 0, 0.04);
-    --shadow-elevated: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 4px 16px -8px rgba(0, 0, 0, 0.06);
-    --shadow-blue: 0 4px 20px -5px rgba(29, 142, 230, 0.2);
+    --shadow-soft: 0 2px 15px -3px rgba(216, 138, 158, 0.08), 0 2px 6px -4px rgba(0, 0, 0, 0.03);
+    --shadow-card: 0 4px 20px -5px rgba(216, 138, 158, 0.12), 0 2px 8px -4px rgba(0, 0, 0, 0.04);
+    --shadow-elevated: 0 10px 40px -10px rgba(216, 138, 158, 0.18), 0 4px 16px -8px rgba(0, 0, 0, 0.06);
+    --shadow-blue: 0 4px 20px -5px rgba(216, 138, 158, 0.3);
   }
 
   .dark {
@@ -162,16 +162,16 @@
     font-size: 0.875rem;
     letter-spacing: 0.01em;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 2px 10px -3px rgba(29, 142, 230, 0.3);
+    box-shadow: 0 2px 10px -3px rgba(184, 134, 11, 0.3);
   }
   .btn-primary:hover {
     background: hsl(209 80% 45%);
-    box-shadow: 0 6px 20px -5px rgba(29, 142, 230, 0.4);
+    box-shadow: 0 6px 20px -5px rgba(184, 134, 11, 0.4);
     transform: translateY(-1px);
   }
   .btn-primary:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px -3px rgba(29, 142, 230, 0.3);
+    box-shadow: 0 2px 8px -3px rgba(184, 134, 11, 0.3);
   }
 
   /* ─── Search Input ─── */
@@ -338,10 +338,10 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(29, 142, 230, 0.3);
+    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.3);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(29, 142, 230, 0);
+    box-shadow: 0 0 0 8px rgba(184, 134, 11, 0);
   }
 }
 
@@ -416,11 +416,11 @@
 }
 
 /* ===================================================================
-   Swiper Overrides (YJ PARA brand blue)
+   Swiper Overrides (brand gold)
    =================================================================== */
 .swiper-button-next,
 .swiper-button-prev {
-  color: #1D8EE6;
+  color: #D88A9E;
   width: 44px;
   height: 44px;
   background-color: white;
@@ -428,14 +428,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 12px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px -3px rgba(216, 138, 158, 0.2);
   transition: all 0.3s ease;
 }
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  background-color: #1D8EE6;
+  background-color: #D88A9E;
   color: white;
-  box-shadow: 0 4px 16px -4px rgba(29, 142, 230, 0.35);
+  box-shadow: 0 4px 16px -4px rgba(216, 138, 158, 0.4);
 }
 .swiper-button-next::after,
 .swiper-button-prev::after {
@@ -451,11 +451,11 @@
 /* Custom Announcement Bar Keyframes & Animations */
 @keyframes text-glow-pulse {
   0%, 100% {
-    text-shadow: 0 0 2px rgba(29, 142, 230, 0.15);
+    text-shadow: 0 0 2px rgba(216, 138, 158, 0.2);
     opacity: 0.92;
   }
   50% {
-    text-shadow: 0 0 8px rgba(29, 142, 230, 0.5);
+    text-shadow: 0 0 8px rgba(216, 138, 158, 0.5);
     opacity: 1;
   }
 }

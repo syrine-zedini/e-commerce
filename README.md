@@ -18,7 +18,6 @@ mise en route locale, conventions de code, points d'attention.
   (driver `pg`, pas de driver serverless).
 - **Emails** : Nodemailer (SMTP), actuellement désactivé pour les commandes client (voir
   `server/email.ts`).
-- **Livraison** : intégration First Delivery (API tierce) pour la création/suivi des colis.
 
 Il n'y a **pas** de serveur frontend séparé en dev : Vite tourne en *middleware mode* à
 l'intérieur du process Express (voir `server/vite.ts`), donc tout — API et frontend —
@@ -36,7 +35,7 @@ est servi sur **un seul port : `3333`**.
 ### 2. Variables d'environnement
 Deux fichiers, tous deux **gitignorés**, à créer à la racine à partir de `.env.example` :
 
-- **`.env`** — secrets partagés par toute l'équipe (SMTP, First Delivery). Ne contient
+- **`.env`** — secrets partagés par toute l'équipe (SMTP). Ne contient
   volontairement pas `DATABASE_URL` (spécifique à chaque poste).
 - **`.env.local`** — overrides propres à ta machine, notamment `DATABASE_URL` pointant
   vers ton Postgres local :
@@ -104,7 +103,7 @@ server/
     categories.ts, products.ts, promotions.ts, conseils.ts, galleryImages.ts,
     productReviews.ts, wishlist.ts, contacts.ts, seoPages.ts, commandes.ts (+ /api/auth/login),
     fileStorage.ts (upload/liste/suppression fichiers), stock.ts (décrément stock commande),
-    imgProxy.ts (proxy + cache disque pour images Google Drive), firstDelivery.ts
+    imgProxy.ts (proxy + cache disque pour images Google Drive)
 
 shared/
   schema.ts           Schéma Drizzle (source de vérité des tables Postgres)
@@ -172,12 +171,12 @@ frontend ET le backend. Une migration complète a été faite pour :
    API REST Express classique + stockage fichiers sur disque local
    (`server/storage-local.ts`).
 
-**Conséquence importante** : `SECURITY-SETUP.md` et `FIRST_DELIVERY_SETUP.md` (à la racine
-du repo) ont été écrits **avant** cette migration et mentionnent encore Supabase (RLS,
-`VITE_SUPABASE_URL`, policies SQL, etc.) — ces passages-là sont obsolètes et ne
-s'appliquent plus à l'état actuel du code. Les parties non liées à Supabase de
-`SECURITY-SETUP.md` (auth admin en clair côté client, total de commande recalculé côté
-client) restent, elles, valables et à corriger.
+**Conséquence importante** : `SECURITY-SETUP.md` (à la racine du repo) a été écrit
+**avant** cette migration et mentionne encore Supabase (RLS, `VITE_SUPABASE_URL`,
+policies SQL, etc.) — ces passages-là sont obsolètes et ne s'appliquent plus à l'état
+actuel du code. Les parties non liées à Supabase de `SECURITY-SETUP.md` (auth admin en
+clair côté client, total de commande recalculé côté client) restent, elles, valables et
+à corriger.
 
 ---
 
@@ -201,13 +200,3 @@ client) restent, elles, valables et à corriger.
   réactivé (décommenter le bloc + retirer le `console.log`).
 - **`@neondatabase/serverless`** reste dans `package.json` mais n'est plus utilisé nulle
   part dans le code (résidu de l'ancienne intégration Supabase/Neon) — safe à retirer.
-- **First Delivery — statut jamais mis à jour tout seul** : `first_delivery_status` en
-  base ne se rafraîchit que quand un admin a la commande ouverte dans `OrderManagement.tsx`
-  (polling front toutes les 10s pendant que le modal est ouvert, voir
-  `FIRST_DELIVERY_SETUP.md`). Pas de tâche de fond ni de webhook côté serveur — si
-  personne n'ouvre la commande, le statut en base reste figé même si le colis avance
-  réellement chez First Delivery. Piège déjà rencontré une fois : `FIRST_DELIVERY_TOKEN`
-  et `SMTP_PASS` (`server/routes/firstDelivery.ts`, `server/email.ts`) doivent être lus
-  à l'intérieur d'une fonction, jamais comme `const` en haut du fichier — ces fichiers
-  sont importés par `server/index.ts` avant que `.env` soit chargé, donc une lecture au
-  chargement du module capture toujours une valeur vide.

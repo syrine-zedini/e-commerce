@@ -1,7 +1,6 @@
 // src/components/Header.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { convertImageUrl, onImgError } from "@/lib/imageUtils";
-import AnnouncementBar from "./AnnouncementBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserIcon, ShoppingBasket } from "lucide-react";
@@ -42,7 +41,7 @@ export default function Header({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allProducts = await fetchAllProducts("/api/products?activeOnly=1&inStockOnly=1&withPriceOnly=1&tvaOnly=1");
+        const allProducts = await fetchAllProducts("/api/products?activeOnly=1&inStockOnly=1&withPriceOnly=1");
         setProducts(allProducts);
       } catch (error: any) {
         console.error("Error fetching products in search Header:", error.message);
@@ -110,7 +109,7 @@ export default function Header({
       ? Number(product.form)
       : null;
 
-    const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+    const maxOrderable = stockVal !== null ? stockVal : null;
     if (maxOrderable !== null && item.quantity + 1 > maxOrderable) {
       toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
         style: { borderRadius: "10px", background: "#333", color: "#fff" },
@@ -133,7 +132,6 @@ export default function Header({
 
   return (
     <>
-      <AnnouncementBar />
       {/* Header */}
       <header className="glass shadow-soft sticky top-0 z-40 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -141,21 +139,20 @@ export default function Header({
           <div className="flex items-center justify-between py-2">
             {/* Logo */}
             <Link to="/">
-              <img
-                className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer object-contain scale-110 sm:scale-[1.7] transform origin-left ml-2 sm:-ml-8"
-                alt="YJ PARA logo"
-                src="/figmaAssets/logo YJPARA.jpeg"
-                onClick={() => {
-                  window.location.href = "/";
-                }}
-              />
+              <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-black overflow-hidden flex items-center justify-center shadow-md ring-1 ring-[#D88A9E]/40 flex-shrink-0">
+                <img
+                  className="h-full w-full object-cover scale-125"
+                  alt="Glow Store logo"
+                  src="/figmaAssets/brand/glow-store-logo.jpeg"
+                />
+              </div>
             </Link>
 
             {/* Header links */}
             <div className="hidden lg:flex items-center space-x-14">
               {headerLinks.map((link, index) => (
                 <Link key={index} to={link.href}>
-                  <Button className="font-medium text-slate-600 text-base bg-transparent border-0 p-0 h-auto hover:bg-transparent hover:text-[#1D8EE6] transition-colors focus:ring-0 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-[#1D8EE6] hover:after:w-full after:transition-all after:duration-300">
+                  <Button className="font-medium text-slate-600 text-base bg-transparent border-0 p-0 h-auto hover:bg-transparent hover:text-[#C86D85] transition-colors focus:ring-0 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-[#D88A9E] hover:after:w-full after:transition-all after:duration-300">
                     {link.name}
                   </Button>
                 </Link>
@@ -216,7 +213,7 @@ export default function Header({
               {/* Cart icon + dropdown popup */}
               <div className="relative">
                 <ShoppingBasket
-                  className="w-6 h-6 cursor-pointer text-[#1D8EE6] hover:scale-110 transition-transform duration-300"
+                  className="w-6 h-6 cursor-pointer text-[#C86D85] hover:scale-110 transition-transform duration-300"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -225,7 +222,7 @@ export default function Header({
                 />
                 {cart.length > 0 && (
                   <div
-                    className="absolute -top-2 -right-2 w-5 h-5 bg-[#1D8EE6] shadow-sm rounded-full flex items-center justify-center animate-pulse-glow cursor-pointer"
+                    className="absolute -top-2 -right-2 w-5 h-5 bg-[#C86D85] shadow-sm rounded-full flex items-center justify-center animate-pulse-glow cursor-pointer"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -239,21 +236,21 @@ export default function Header({
                 {/* Dropdown popup */}
                 {isCartOpen && (
                   <div
-                    className="absolute right-0 top-10 z-[999] w-[360px] bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] border border-slate-100 overflow-hidden"
+                    className="absolute right-0 top-10 z-[999] w-[360px] bg-white rounded-2xl shadow-[0_8px_40px_rgba(216,138,158,0.2)] border border-rose-100 overflow-hidden"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <div className="absolute -top-2 right-4 w-4 h-4 bg-white border-l border-t border-slate-100 rotate-45" />
+                    <div className="absolute -top-2 right-4 w-4 h-4 bg-white border-l border-t border-rose-100 rotate-45" />
 
                     <div className="p-5">
-                      <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                      <div className="flex justify-between items-center mb-4 pb-3 border-b border-rose-100/60">
                         <h4 className="text-base font-bold text-slate-800">
                           🛒 Mon Panier
                           {cart.length > 0 && (
-                            <span className="ml-2 text-xs font-semibold bg-blue-50 text-[#1D8EE6] px-2 py-0.5 rounded-full">{cart.length} article{cart.length > 1 ? 's' : ''}</span>
+                            <span className="ml-2 text-xs font-semibold bg-[#FDF0F3] text-[#C86D85] px-2 py-0.5 rounded-full border border-[#F8D7DF]">{cart.length} article{cart.length > 1 ? 's' : ''}</span>
                           )}
                         </h4>
                         <button
-                          className="text-slate-400 hover:text-slate-600 text-lg leading-none transition-colors hover:bg-slate-100 w-7 h-7 rounded-full flex items-center justify-center"
+                          className="text-slate-400 hover:text-slate-600 text-lg leading-none transition-colors hover:bg-rose-50 w-7 h-7 rounded-full flex items-center justify-center"
                           onClick={() => setIsCartOpen(false)}
                         >
                           ✕
@@ -264,7 +261,7 @@ export default function Header({
                         <>
                           <ul className="space-y-3 max-h-[260px] overflow-y-auto pr-1 mb-4">
                             {cart.map((item, index) => (
-                              <li key={index} className="flex items-center gap-3 p-2.5 bg-slate-50 rounded-xl border border-slate-100 relative pr-8">
+                              <li key={index} className="flex items-center gap-3 p-2.5 bg-rose-50/40 rounded-xl border border-rose-100/50 relative pr-8">
                                 <img
                                   src={convertImageUrl(item.image_path || item.image || item.imageUrl)}
                                   alt={item.name}
@@ -273,8 +270,8 @@ export default function Header({
                                 />
                                 <div className="flex-1 min-w-0">
                                   <p className="text-xs font-semibold text-slate-800 line-clamp-1">{item.name}</p>
-                                  <p className="text-xs font-bold text-[#1D8EE6] mt-0.5">{((item.discounted_price > 0 ? item.discounted_price : item.original_price) || item.price || 0).toFixed(3)} TND</p>
-                                  <div className="flex items-center mt-1.5 bg-white rounded-lg border border-slate-200 w-fit">
+                                  <p className="text-xs font-bold text-[#C86D85] mt-0.5">{((item.discounted_price > 0 ? item.discounted_price : item.original_price) || item.price || 0).toFixed(3)} TND</p>
+                                  <div className="flex items-center mt-1.5 bg-white rounded-lg border border-rose-100 w-fit">
                                     <button onClick={() => decrementQuantity(item.id)} className="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-800 text-sm rounded-l-lg transition-colors">−</button>
                                     <span className="text-xs font-medium w-6 text-center">{item.quantity}</span>
                                     <button onClick={() => incrementQuantity(item.id)} className="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-800 text-sm rounded-r-lg transition-colors">+</button>
@@ -282,7 +279,7 @@ export default function Header({
                                 </div>
                                 <button
                                   onClick={() => removeFromCart(String(item.id))}
-                                  className="absolute top-2.5 right-2.5 text-slate-400 hover:text-rose-500 transition-colors w-5 h-5 rounded-full flex items-center justify-center hover:bg-slate-200/50 text-[10px]"
+                                  className="absolute top-2.5 right-2.5 text-slate-400 hover:text-rose-500 transition-colors w-5 h-5 rounded-full flex items-center justify-center hover:bg-rose-100/50 text-[10px]"
                                   title="Supprimer"
                                 >
                                   ✕
@@ -300,25 +297,25 @@ export default function Header({
                               <div className="mb-4 px-1">
                                 {remaining > 0 ? (
                                   <p className="text-xs text-slate-600 mb-2">
-                                    Ajoutez <span className="font-bold text-[#1D8EE6]">{remaining.toFixed(3)} TND</span> au panier et bénéficiez de la <span className="font-bold">livraison gratuite</span> !
+                                    Ajoutez <span className="font-bold text-[#C86D85]">{remaining.toFixed(3)} TND</span> au panier et bénéficiez de la <span className="font-bold">livraison gratuite</span> !
                                   </p>
                                 ) : (
-                                  <p className="text-xs font-semibold text-green-600 mb-2">Votre commande est éligible pour la livraison gratuite 🎉</p>
+                                  <p className="text-xs font-semibold text-emerald-600 mb-2">Votre commande est éligible pour la livraison gratuite 🎉</p>
                                 )}
-                                <div className="w-full bg-slate-100 rounded-full h-2">
+                                <div className="w-full bg-rose-100/60 rounded-full h-2">
                                   <div
                                     className="h-2 rounded-full transition-all duration-500"
-                                    style={{ width: `${progress}%`, backgroundColor: remaining > 0 ? '#1D8EE6' : '#22c55e' }}
+                                    style={{ width: `${progress}%`, backgroundColor: remaining > 0 ? '#C86D85' : '#22c55e' }}
                                   />
                                 </div>
                               </div>
                             );
                           })()}
 
-                          <div className="border-t border-slate-100 pt-3">
+                          <div className="border-t border-rose-100/60 pt-3">
                             <div className="flex justify-between items-center mb-1">
                               <span className="text-sm text-slate-500 font-medium">Total</span>
-                              <span className="text-lg font-bold text-[#1D8EE6]">
+                              <span className="text-lg font-bold text-[#C86D85]">
                                 {cart.reduce((total, item) => total + ((item.discounted_price > 0 ? item.discounted_price : item.original_price) || item.price || 0) * item.quantity, 0).toFixed(3)} TND
                               </span>
                             </div>
@@ -326,7 +323,7 @@ export default function Header({
                               dont <span className="font-semibold">{cart.reduce((sum, item) => { const priceTtc = ((item.discounted_price > 0 ? item.discounted_price : item.original_price) || item.price || 0) * item.quantity; const tvaRate = item.tva !== undefined && item.tva !== null ? parseFloat(String(item.tva)) : 0; return sum + (tvaRate > 0 ? priceTtc * tvaRate / (100 + tvaRate) : 0); }, 0).toFixed(3)} TND</span> TVA
                             </p>
                             <button
-                              className="w-full bg-[#1D8EE6] hover:bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm"
+                              className="w-full bg-gradient-to-r from-[#D88A9E] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] text-white font-bold py-3 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm"
                               onClick={() => {
                                 localStorage.setItem("checkoutCart", JSON.stringify(cart));
                                 setIsCartOpen(false);
@@ -339,7 +336,7 @@ export default function Header({
                         </>
                       ) : (
                         <div className="py-8 flex flex-col items-center">
-                          <div className="w-14 h-14 bg-slate-50 rounded-full flex items-center justify-center mb-3 text-3xl">🛒</div>
+                          <div className="w-14 h-14 bg-rose-50 rounded-full flex items-center justify-center mb-3 text-3xl">🛒</div>
                           <p className="text-slate-400 text-sm font-medium">Ton panier est vide</p>
                         </div>
                       )}
@@ -349,7 +346,7 @@ export default function Header({
               </div>
 
               <div
-                className="hidden sm:block text-[#1D8EE6] font-semibold cursor-pointer hover:text-blue-600 transition-colors"
+                className="hidden sm:block text-[#C86D85] font-semibold cursor-pointer hover:text-[#B85B75] transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -367,7 +364,7 @@ export default function Header({
 
               {/* User icon */}
               <Link to="/dashboard">
-                <UserIcon className="w-6 h-6 cursor-pointer text-[#1D8EE6] hover:text-blue-600 hover:scale-110 transition-all ml-10" />
+                <UserIcon className="w-6 h-6 cursor-pointer text-[#C86D85] hover:text-[#B85B75] hover:scale-110 transition-all ml-10" />
               </Link>
             </div>
           </div>

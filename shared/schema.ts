@@ -57,8 +57,6 @@ export const commandes = pgTable("commandes", {
   total: numeric("total"),
   produits: jsonb("produits"),
   statut: text("statut").default("pending"),
-  firstDeliveryBarcode: text("first_delivery_barcode"),
-  firstDeliveryStatus: text("first_delivery_status"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 

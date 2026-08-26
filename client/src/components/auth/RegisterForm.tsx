@@ -50,7 +50,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
     <div className="w-full max-w-md mx-auto">
       <div className="bg-white rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#1D8EE6] rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-[#C86D85] rounded-full flex items-center justify-center mx-auto mb-4">
             <UserPlus className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
@@ -69,7 +69,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
                 placeholder="Enter your full name"
                 required
               />
@@ -87,7 +87,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
                 placeholder="Enter your email"
                 required
               />
@@ -102,7 +102,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
               name="role"
               value={formData.role}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
             >
               <option value="client">Client</option>
               <option value="admin">Admin</option>
@@ -121,7 +121,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
                 placeholder="Create a password"
                 required
               />
@@ -146,7 +146,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
                 placeholder="Confirm your password"
                 required
               />
@@ -169,7 +169,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onToggleForm }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-[#1D8EE6] to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-[#1D8EE6] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(29,142,230,0.3)]"
+            className="w-full bg-gradient-to-r from-[#C86D85] to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-[#C86D85] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(216,138,158,0.3)]"
           >
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>

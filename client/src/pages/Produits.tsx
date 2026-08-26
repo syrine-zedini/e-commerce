@@ -113,7 +113,7 @@ const [quantities, setQuantities] = useState<Record<number, number>>({});
 const getQty = (id: number) => quantities[id] ?? 1;
 const changeQty = (id: number, delta: number, product?: any) => {
   const stockVal = product?.form != null && product?.form !== "" ? Number(product.form) : null;
-  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal - 3 : Infinity;
+  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal : Infinity;
   setQuantities((prev) => {
     const current = prev[id] ?? 1;
     const next = current + delta;
@@ -309,7 +309,7 @@ const headerLinks = HEADER_LINKS;
   // ✅ cart function
 const addToCart = (product: any, qty: number = 1) => {
   const stockVal = product.form != null && product.form !== "" ? Number(product.form) : null;
-  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal - 3 : null;
+  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal : null;
   const currentInCart = (cart as any[]).find((i: any) => String(i.id) === String(product.id))?.quantity || 0;
   if (maxOrderable !== null && currentInCart + qty > maxOrderable) {
     const remaining = Math.max(0, maxOrderable - currentInCart);
@@ -382,16 +382,12 @@ return (
       </div>
 
       {/* Hero Section */}
-      <section className="w-full h-[200px] relative bg-[url(/figmaAssets/products/rectangle-230.png)] bg-cover bg-center">
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(29,142,230,0.85)_0%,rgba(235,245,252,0.4)_100%)]" />
-        <div className="relative px-[84px] py-[57px]">
-          <h1 className="[font-family:'Inter',Helvetica] font-bold text-text-light text-[32px] mb-4">
-            Produits
-          </h1>
-          <div className="[font-family:'Inter',Helvetica] font-medium text-text-light text-base">
-            Accueil &gt; Produits
-          </div>
-        </div>
+      <section className="w-full h-[200px] relative overflow-hidden">
+        <img
+          src="/figmaAssets/brand/banners/cosmetic-2.jpg"
+          alt="Glow Store"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
       </section>
 
       {/* Categories Section */}
@@ -400,7 +396,7 @@ return (
           {/* Left Arrow */}
           <button
             onClick={() => handleArrowScroll("left")}
-            className="absolute left-0 md:-left-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#1D8EE6] focus:outline-none cursor-pointer"
+            className="absolute left-0 md:-left-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#C86D85] focus:outline-none cursor-pointer"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
@@ -409,7 +405,7 @@ return (
           {/* Right Arrow */}
           <button
             onClick={() => handleArrowScroll("right")}
-            className="absolute right-0 md:-right-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#1D8EE6] focus:outline-none cursor-pointer"
+            className="absolute right-0 md:-right-12 top-[30%] sm:top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-slate-200/80 shadow-md hover:shadow-lg active:scale-95 hover:scale-105 transition-all duration-300 flex items-center justify-center text-slate-600 hover:text-[#C86D85] focus:outline-none cursor-pointer"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
@@ -440,7 +436,7 @@ return (
                 }}
               >
                 <div className={`relative w-24 h-24 sm:w-32 sm:h-32 lg:w-36 lg:h-36 mx-auto transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] filter hover:scale-105 ${
-                  selectedCategory === category.id ? "drop-shadow-[0_0_10px_rgba(29,142,230,0.6)]" : "drop-shadow-sm hover:drop-shadow-md"
+                  selectedCategory === category.id ? "drop-shadow-[0_0_10px_rgba(216,138,158,0.6)]" : "drop-shadow-sm hover:drop-shadow-md"
                 }`}>
                   <div className="w-full h-full clip-octagon overflow-hidden bg-white">
                     {category.image ? (
@@ -453,8 +449,8 @@ return (
                         decoding="async"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-                        <span className="text-2xl sm:text-3xl font-black text-[#1D8EE6] uppercase select-none">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100">
+                        <span className="text-2xl sm:text-3xl font-black text-[#C86D85] uppercase select-none">
                           {category.name.charAt(0)}
                         </span>
                       </div>
@@ -462,7 +458,7 @@ return (
                   </div>
                 </div>
                 <div className={`mt-4 font-semibold text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider transition-colors max-w-[100px] sm:max-w-[140px] mx-auto leading-tight ${
-                  selectedCategory === category.id ? "text-[#1D8EE6]" : "text-slate-700 group-hover/item:text-[#1D8EE6]"
+                  selectedCategory === category.id ? "text-[#C86D85]" : "text-slate-700 group-hover/item:text-[#C86D85]"
                 }`}>
                   {category.name}
                 </div>
@@ -478,7 +474,7 @@ return (
           {/* Categories Filter (Searchable Dropdown) */}
           <div className="w-full relative" ref={categoryDropdownRef}>
             <h3 className="text-[11px] sm:text-sm font-semibold text-slate-700 mb-2.5 flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5 text-[#1D8EE6] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3.5 h-3.5 text-[#C86D85] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
               <span className="truncate">Catégories</span>
@@ -501,7 +497,7 @@ return (
                     ? (productCategories.find(c => c.id === selectedCategory)?.name || "Toutes") 
                     : "Toutes"
                 }
-                className="w-full h-9 sm:h-11 px-3 py-2 pr-8 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D8EE6] transition-all text-xs sm:text-sm font-medium cursor-pointer"
+                className="w-full h-9 sm:h-11 px-3 py-2 pr-8 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#C86D85] transition-all text-xs sm:text-sm font-medium cursor-pointer"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
                 <ChevronDownIcon className="h-4 w-4 text-slate-500" />
@@ -516,7 +512,7 @@ return (
                     setCategorySearchVal("");
                     setIsDropdownOpen(false);
                   }}
-                  className="px-3 py-2 text-xs sm:text-sm text-slate-700 hover:bg-blue-50 hover:text-[#1D8EE6] rounded-lg cursor-pointer font-medium transition-colors"
+                  className="px-3 py-2 text-xs sm:text-sm text-slate-700 hover:bg-rose-50 hover:text-[#C86D85] rounded-lg cursor-pointer font-medium transition-colors"
                 >
                   Toutes
                 </div>
@@ -534,13 +530,13 @@ return (
                       }}
                       className={`px-3 py-2 text-xs sm:text-sm rounded-lg cursor-pointer font-medium transition-colors flex items-center justify-between ${
                         selectedCategory === category.id
-                          ? "bg-blue-50 text-[#1D8EE6]"
-                          : "text-slate-700 hover:bg-slate-50 hover:text-[#1D8EE6]"
+                          ? "bg-rose-50 text-[#C86D85]"
+                          : "text-slate-700 hover:bg-slate-50 hover:text-[#C86D85]"
                       }`}
                     >
                       <span>{category.name}</span>
                       {selectedCategory === category.id && (
-                        <span className="text-[#1D8EE6] font-bold">✓</span>
+                        <span className="text-[#C86D85] font-bold">✓</span>
                       )}
                     </div>
                   ))}
@@ -558,7 +554,7 @@ return (
           {/* Search Filter */}
           <div className="w-full">
             <h3 className="text-[11px] sm:text-sm font-semibold text-slate-700 mb-2.5 flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5 text-[#1D8EE6] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3.5 h-3.5 text-[#C86D85] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <span className="truncate">Recherche</span>
@@ -569,12 +565,12 @@ return (
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Rechercher un produit..."
-                className="w-full h-9 sm:h-11 pl-3 pr-9 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D8EE6] transition-all text-xs sm:text-sm font-medium"
+                className="w-full h-9 sm:h-11 pl-3 pr-9 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#C86D85] transition-all text-xs sm:text-sm font-medium"
                 style={{ paddingRight: searchQuery.trim().length > 0 ? "70px" : "40px" }}
               />
               {searchQuery.trim().length > 0 && (
                 <>
-                  <span className="absolute right-16 top-1/2 transform -translate-y-1/2 text-xs font-bold text-[#1D8EE6] bg-[#EBF5FC] px-2.5 py-0.5 rounded-full pointer-events-none">
+                  <span className="absolute right-16 top-1/2 transform -translate-y-1/2 text-xs font-bold text-[#C86D85] bg-[#F7F0DC] px-2.5 py-0.5 rounded-full pointer-events-none">
                     {filteredProducts.length}
                   </span>
                   <button
@@ -625,7 +621,7 @@ return (
                     <button key={page} onClick={() => goToPage(page as number)}
                       className={`w-9 h-9 rounded-full text-sm font-semibold transition ${
                         currentPage === page
-                          ? "bg-[#1D8EE6] text-white shadow-md"
+                          ? "bg-[#C86D85] text-white shadow-md"
                           : "hover:bg-slate-100 text-slate-700"
                       }`}
                     >{page}</button>
@@ -655,7 +651,7 @@ return (
                   }`}
                 >
                   <Link to={`/detailsprod/${product.id}`} className="block h-full">
-                    <Card className="bg-white rounded-2xl border border-slate-100/80 hover:border-[#1D8EE6]/20 hover:shadow-card hover:-translate-y-1 transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] h-full flex flex-col overflow-hidden">
+                    <Card className="bg-white rounded-2xl border border-slate-100/80 hover:border-[#C86D85]/20 hover:shadow-card hover:-translate-y-1 transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] h-full flex flex-col overflow-hidden">
                       <CardContent className="p-2.5 sm:p-4 flex flex-col h-full">
                         {/* Badges */}
                         <div className="flex gap-1 mb-2 flex-wrap">
@@ -691,14 +687,14 @@ return (
                         )}
 
                         {/* Name */}
-                        <h3 className="font-semibold text-slate-700 text-xs sm:text-sm mb-2 line-clamp-2 hover:text-[#1D8EE6] transition-colors h-8 sm:h-10">
+                        <h3 className="font-semibold text-slate-700 text-xs sm:text-sm mb-2 line-clamp-2 hover:text-[#C86D85] transition-colors h-8 sm:h-10">
                           {product.name}
                         </h3>
 
                         {/* Category */}
                         <div className="flex gap-1 mb-3 flex-wrap">
                           {product.category_id && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-[#F0F7FF] text-[#1D8EE6] rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest border border-[#1D8EE6]/20">
+                            <span className="inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-[#FBF6E8] text-[#C86D85] rounded-md text-[8px] sm:text-[9px] font-bold uppercase tracking-widest border border-[#C86D85]/20">
                               {productCategories.find((cat) => cat.id === product.category_id)?.name || "Catégorie"}
                             </span>
                           )}
@@ -713,7 +709,7 @@ return (
                                 {product.original_price}&nbsp;DT
                               </span>
                             )}
-                            <span className="font-extrabold text-[#1D8EE6] text-sm sm:text-base leading-none whitespace-nowrap">
+                            <span className="font-extrabold text-[#C86D85] text-sm sm:text-base leading-none whitespace-nowrap">
                               {(product.discounted_price && product.discounted_price > 0 ? product.discounted_price : product.original_price)}&nbsp;DT
                             </span>
                           </div>
@@ -722,12 +718,12 @@ return (
                             <div className="flex items-center bg-slate-50 border border-slate-200/60 rounded-lg p-0.5 shadow-sm">
                               <button
                                 onClick={(e) => { e.preventDefault(); changeQty(product.id, -1, product); }}
-                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                               >−</button>
                               <span className="w-6 text-center text-[10px] sm:text-xs font-semibold text-slate-700">{getQty(product.id)}</span>
                               <button
                                 onClick={(e) => { e.preventDefault(); changeQty(product.id, 1, product); }}
-                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                                className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                               >+</button>
                             </div>
                             <button
@@ -735,7 +731,7 @@ return (
                                 e.preventDefault();
                                 addToCart(product, getQty(product.id));
                               }}
-                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#1D8EE6] to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(29,142,230,0.2)] hover:shadow-[0_6px_15px_rgba(29,142,230,0.3)] hover:-translate-y-0.5 overflow-hidden"
+                              className="relative flex-1 group/btn h-[28px] sm:h-[32px] bg-gradient-to-r from-[#C86D85] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_4px_10px_rgba(216,138,158,0.2)] hover:shadow-[0_6px_15px_rgba(216,138,158,0.3)] hover:-translate-y-0.5 overflow-hidden"
                             >
                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                               <div className="flex items-center gap-1 relative z-10">
@@ -769,7 +765,7 @@ return (
                   <button key={page} onClick={() => goToPage(page as number)}
                     className={`w-9 h-9 rounded-full text-sm font-semibold transition ${
                       currentPage === page
-                        ? "bg-[#1D8EE6] text-white shadow-md"
+                        ? "bg-[#C86D85] text-white shadow-md"
                         : "hover:bg-slate-100 text-slate-700"
                     }`}
                   >{page}</button>
@@ -795,14 +791,14 @@ return (
               const Icon = feature.icon as any;
               return (
                 <Link key={index} to={feature.link} className="block cursor-pointer">
-                  <Card className="bg-white rounded-2xl border border-slate-100/80 hover:shadow-card hover:border-[#1D8EE6]/15 hover:-translate-y-1 transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] group h-full">
+                  <Card className="bg-white rounded-2xl border border-slate-100/80 hover:shadow-card hover:border-[#C86D85]/15 hover:-translate-y-1 transition-all duration-400 ease-[cubic-bezier(0.25,0.8,0.25,1)] group h-full">
                     <CardContent className="p-7 sm:p-8 flex items-center space-x-5 sm:space-x-6 h-full">
                       <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 shadow-sm ${feature.bgClass}`}>
                         <Icon className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 group-hover:scale-110" />
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-slate-800 text-base sm:text-lg mb-2 group-hover:text-[#1D8EE6] transition-colors leading-snug">
+                        <h3 className="font-bold text-slate-800 text-base sm:text-lg mb-2 group-hover:text-[#C86D85] transition-colors leading-snug">
                           {feature.title}
                         </h3>
                         <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">

@@ -7,7 +7,6 @@ import {
   Truck,
   User,
   Heart,
-  Landmark,
   Trash2,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -27,7 +26,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
     { id: 'orders',          label: 'Commandes',              icon: ShoppingCart },
     { id: 'deleted-orders',  label: 'Commandes Restaurées',  icon: Trash2 },
     { id: 'promotions',      label: 'Promotions',             icon: Tag },
-    { id: 'marques',         label: 'Marques',                icon: Landmark },
   ];
 
   const commercialMenuItems = [
@@ -37,7 +35,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
     { id: 'orders',          label: 'Commandes',              icon: ShoppingCart },
     { id: 'deleted-orders',  label: 'Commandes Restaurées',  icon: Trash2 },
     { id: 'promotions',      label: 'Promotions',             icon: Tag },
-    { id: 'marques',         label: 'Marques',                icon: Landmark },
   ];
 
   const clientMenuItems = [
@@ -68,11 +65,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
     <div className="w-64 min-h-screen bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
       {/* Logo */}
       <div className="flex justify-center items-center px-6 py-5 border-b border-gray-100">
-        <img
-          src="/figmaAssets/logo YJPARA.jpeg"
-          alt="Logo YJ PARA"
-          className="h-14 w-auto object-contain"
-        />
+        <div className="h-14 w-14 rounded-full bg-black overflow-hidden flex items-center justify-center shadow-sm">
+          <img
+            src="/figmaAssets/brand/glow-store-logo.jpeg"
+            alt="Glow Store logo"
+            className="h-full w-full object-cover scale-125"
+          />
+        </div>
       </div>
 
       {/* Navigation */}
@@ -87,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
               onClick={() => onTabChange(item.id)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 mb-1 ${
                 isActive
-                  ? 'bg-[#1D8EE6] text-white shadow-sm'
+                  ? 'bg-[#C86D85] text-white shadow-sm'
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >

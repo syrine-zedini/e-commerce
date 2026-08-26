@@ -1,6 +1,5 @@
 import React from "react";
-import { FaFacebookF, FaInstagram } from "react-icons/fa";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { FooterMobile } from "@/components/ui/FooterMobile";
 import { MobileHeader } from "@/components/MobileHeader";
 import { HEADER_LINKS, toMobileFooterSections } from "@/lib/pageData";
@@ -50,27 +49,13 @@ export const ContactMobile = (): JSX.Element => {
       <div className="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-4 w-full max-w-[353px] mb-6">
         {/* Address */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-card-background rounded-full flex items-center justify-center text-[#1D8EE6]">
+          <div className="w-10 h-10 bg-card-background rounded-full flex items-center justify-center text-[#C86D85]">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7V2z" />
             </svg>
           </div>
           <div className="flex flex-col text-xs">
             <span className="font-semibold text-slate-800">Parapharmacie 100% en ligne</span>
-          </div>
-        </div>
-
-        {/* Phone */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-card-background rounded-full flex items-center justify-center">
-            <img src="/figmaAssets/contactm/call.png" alt="Phone" className="w-5 h-5" />
-          </div>
-          <div className="flex flex-col text-xs">
-            <span className="font-normal">Num de téléphone:</span>
-<span className="font-semibold">
-  <a href="tel:+21653230222" className="hover:underline">
-+216 53 230 222  </a>
-</span>
           </div>
         </div>
 
@@ -88,42 +73,17 @@ export const ContactMobile = (): JSX.Element => {
             </span>
           </div>
         </div>
-
-        {/* Social */}
-        <div className="flex items-center gap-3">
-          <div className="flex flex-col text-xs">
-            <span className="font-normal">Réseaux sociaux:</span>
-            <div className="flex items-center gap-2 mt-1">
-              <a
-                href="https://www.facebook.com/profile.php?id=61590827016876"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 bg-card-background rounded-full flex items-center justify-center text-slate-600 hover:text-white hover:bg-[#1D8EE6] transition-colors duration-200"
-              >
-                <FaFacebookF className="w-4 h-4" />
-              </a>
-              <a
-                href="https://www.instagram.com/yjpara.96830757?igsh=MW4zejl6NTVkeGk0Mw=="
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 bg-card-background rounded-full flex items-center justify-center text-slate-600 hover:text-white hover:bg-gradient-to-br hover:from-[#E1306C] hover:to-[#833AB4] transition-colors duration-200"
-              >
-                <FaInstagram className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Centered logo card matching height and width of the form */}
       <Card className="w-full max-w-[353px] bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-6 flex items-center justify-center min-h-[300px]">
-        <CardContent className="p-0 flex items-center justify-center w-full">
+        <div className="w-40 h-40 rounded-full bg-black overflow-hidden flex items-center justify-center shadow-lg">
           <img
-            src="/figmaAssets/logo YJPARA.jpeg"
-            alt="YJ PARA Logo"
-            className="max-h-[200px] w-auto object-contain"
+            src="/figmaAssets/brand/glow-store-logo.jpeg"
+            alt="Glow Store Logo"
+            className="w-full h-full object-cover scale-125"
           />
-        </CardContent>
+        </div>
       </Card>
    {/* React-hot-toast handles toast notifications */}
     </div>

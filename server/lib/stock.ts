@@ -2,10 +2,8 @@ import { eq } from "drizzle-orm";
 import { products } from "@shared/schema";
 import type { getDb } from "../db";
 
-const LOW_STOCK_THRESHOLD = 3;
-
 function computeStockStatus(stock: number) {
-  return stock <= LOW_STOCK_THRESHOLD ? "en rupture de stock" : "en stock";
+  return stock <= 0 ? "en rupture de stock" : "en stock";
 }
 
 // Applies `delta` to a product's stock (negative to decrement at checkout,

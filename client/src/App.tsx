@@ -43,7 +43,6 @@ import ConseilManagement from "./components/admin/ConseilManagement";
 import { ResponsiveDetailsProducts } from "./components/ResponsiveDetailsProduits";
 import { ContactsTable } from "./components/admin/Contacts";
 import { ResponsiveCheckout } from "./components/ResponsiveCheckout";
-import MarquesManagment from "./components/admin/MarquesManagement";
 import { DeletedOrdersManagement } from "./components/admin/DeletedOrdersManagement";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -77,7 +76,7 @@ const AuthScreen: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100/40 flex items-center justify-center p-4 relative">
       <Link
         to="/"
-        className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-2 text-slate-600 hover:text-[#1D8EE6] font-semibold text-xs sm:text-sm transition-all bg-white/95 backdrop-blur-md px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl shadow-md border border-slate-100 hover:shadow-lg active:scale-95 duration-200"
+        className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-2 text-slate-600 hover:text-[#C86D85] font-semibold text-xs sm:text-sm transition-all bg-white/95 backdrop-blur-md px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl shadow-md border border-slate-100 hover:shadow-lg active:scale-95 duration-200"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Retour à l'accueil</span>
@@ -135,8 +134,6 @@ const DashboardScreen: React.FC = () => {
         return <PromotionManagement />;
       case "conseils":
         return <ConseilManagement />;
-      case "marques":
-        return <MarquesManagment />;
       case "reports":
         return <ReportsAnalytics />;
       case "content":

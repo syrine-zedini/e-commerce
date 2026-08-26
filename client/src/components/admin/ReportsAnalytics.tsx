@@ -114,7 +114,7 @@ export const ReportsAnalytics: React.FC = () => {
     const pageW = doc.internal.pageSize.getWidth();
 
     try {
-      const res = await fetch('/figmaAssets/logo YJPARA.jpeg');
+      const res = await fetch('/figmaAssets/brand/glow-store-logo.jpeg');
       const blob = await res.blob();
       const reader = new FileReader();
       await new Promise<void>(resolve => {
@@ -125,7 +125,7 @@ export const ReportsAnalytics: React.FC = () => {
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
-    doc.setTextColor(29, 142, 230);
+    doc.setTextColor(184, 134, 11);
     doc.text('RAPPORT PRODUITS', pageW - 14, 20, { align: 'right' });
 
     doc.setFontSize(9);
@@ -136,7 +136,7 @@ export const ReportsAnalytics: React.FC = () => {
     const activeFilters = [filterNew && 'Nouveau', filterPopular && 'Populaire', filterOutOfStock && 'En rupture', filterInStock && 'En stock'].filter(Boolean);
     doc.text(`Filtres : ${activeFilters.length > 0 ? activeFilters.join(', ') : 'Tous les produits'}`, pageW - 14, 33, { align: 'right' });
 
-    doc.setDrawColor(29, 142, 230);
+    doc.setDrawColor(184, 134, 11);
     doc.setLineWidth(0.5);
     doc.line(14, 36, pageW - 14, 36);
 
@@ -177,7 +177,7 @@ export const ReportsAnalytics: React.FC = () => {
       startY: y,
       head: [['Nom', 'Categorie', 'Prix HT', 'TVA', 'Prix TTC', 'Stock', 'Statut', 'Tags']],
       body: rows,
-      headStyles: { fillColor: [29, 142, 230], textColor: 255, fontStyle: 'bold', fontSize: 7 },
+      headStyles: { fillColor: [184, 134, 11], textColor: 255, fontStyle: 'bold', fontSize: 7 },
       bodyStyles: { fontSize: 6.5, textColor: 50 },
       alternateRowStyles: { fillColor: [240, 247, 255] },
       columnStyles: {
@@ -305,7 +305,7 @@ export const ReportsAnalytics: React.FC = () => {
         <div className="overflow-x-auto rounded-lg border border-gray-200">
           <table className="w-full text-sm min-w-[800px]">
             <thead>
-              <tr className="bg-[#1D8EE6] text-white">
+              <tr className="bg-[#C86D85] text-white">
                 <th className="px-3 py-2.5 text-left font-semibold">Nom du produit</th>
                 <th className="px-3 py-2.5 text-left font-semibold">Categorie</th>
                 <th className="px-3 py-2.5 text-right font-semibold">Prix HT</th>

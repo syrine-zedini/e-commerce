@@ -56,7 +56,7 @@ export default function CheckoutPage() {
       }
 
       const stockVal = product.form !== null && product.form !== undefined && product.form !== "" ? Number(product.form) : null;
-      const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+      const maxOrderable = stockVal !== null ? stockVal : null;
       if (maxOrderable !== null && item.quantity + 1 > maxOrderable) {
         toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
           style: { borderRadius: '10px', background: '#333', color: '#fff' }
@@ -93,7 +93,7 @@ export default function CheckoutPage() {
       ? 0
       : sousTotal >= 69
       ? 0
-      : 7.2;
+      : 7;
   const total = sousTotal + fraisLivraison;
 
   const totalTVA = cart.reduce((sum, item) => {
@@ -203,7 +203,7 @@ export default function CheckoutPage() {
 
       {/* Hero Section */}
       <section className="w-full h-[200px] relative bg-[url(/figmaAssets/contact/rectangle-230.png)] bg-[100%_100%]">
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(29,142,230,0.85)_0%,rgba(235,245,252,0.4)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(216,138,158,0.85)_0%,rgba(235,245,252,0.4)_100%)]" />
         <div className="relative px-[84px] py-[57px]">
           <h1 className="[font-family:'Inter',Helvetica] font-bold text-text-light text-[32px] tracking-[0] leading-[normal] mb-4">
             Finaliser la commande
@@ -303,7 +303,7 @@ export default function CheckoutPage() {
                     <div className="w-full bg-gray-100 rounded-full h-2">
                       <div
                         className="h-2 rounded-full transition-all duration-500"
-                        style={{ width: `${progress}%`, backgroundColor: remaining > 0 ? '#1D8EE6' : '#22c55e' }}
+                        style={{ width: `${progress}%`, backgroundColor: remaining > 0 ? '#C86D85' : '#22c55e' }}
                       />
                     </div>
                   </div>

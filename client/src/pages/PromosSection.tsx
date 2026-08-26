@@ -39,11 +39,11 @@ const truncateContent = (text: string, wordLimit: number) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-8">
-          <span className="text-xs font-bold text-[#1D8EE6] tracking-widest uppercase mb-1.5 block">CONSEILS DE NOS PHARMACIENS</span>
+          <span className="text-xs font-bold text-[#C86D85] tracking-widest uppercase mb-1.5 block">CONSEILS DE NOS PHARMACIENS</span>
           <h2 className="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">
             Conseils & Santé
           </h2>
-          <div className="w-12 h-[3px] bg-[#1D8EE6] mt-3 rounded-full" />
+          <div className="w-12 h-[3px] bg-[#C86D85] mt-3 rounded-full" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -68,14 +68,14 @@ const truncateContent = (text: string, wordLimit: number) => {
 
               {/* Text Content */}
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="font-bold text-slate-800 text-base lg:text-lg mb-2 line-clamp-2 hover:text-[#1D8EE6] transition-colors leading-snug">
+                <h3 className="font-bold text-slate-800 text-base lg:text-lg mb-2 line-clamp-2 hover:text-[#C86D85] transition-colors leading-snug">
                   {conseil.title}
                 </h3>
                 <p className="text-slate-500 text-xs sm:text-sm mb-4 line-clamp-3 leading-relaxed flex-1">
                   {truncateContent(conseil.content, 18)}
                 </p>
                 <Link to={`/detailsconseil/${conseil.id}`}>
-                  <span className="inline-flex items-center text-[#1D8EE6] hover:text-blue-700 font-bold text-sm transition-colors cursor-pointer">
+                  <span className="inline-flex items-center text-[#C86D85] hover:text-blue-700 font-bold text-sm transition-colors cursor-pointer">
                     Lire l'article <span className="ml-1.5 group-hover:translate-x-1 transition-transform duration-200">→</span>
                   </span>
                 </Link>

@@ -221,7 +221,7 @@ const showToast = (message: string, type: "cart" | "wishlist" = "cart") => {
   } else {
     toast.success(message, {
       style: { borderRadius: '10px', background: '#fff', color: '#333', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' },
-      iconTheme: { primary: type === "wishlist" ? '#ef4444' : '#1D8EE6', secondary: '#fff' }
+      iconTheme: { primary: type === "wishlist" ? '#ef4444' : '#C86D85', secondary: '#fff' }
     });
   }
 };
@@ -268,7 +268,7 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
 
       {/* Breadcrumb Hero */}
       <section className="w-full h-[160px] md:h-[200px] relative bg-[url(/figmaAssets/products/rectangle-230.png)] bg-cover bg-center">
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(29,142,230,0.85)_0%,rgba(235,245,252,0.4)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(216,138,158,0.85)_0%,rgba(235,245,252,0.4)_100%)]" />
         <div className="relative px-6 md:px-[84px] py-8 md:py-[57px]">
           <h1 className="font-bold text-white text-2xl md:text-[32px] tracking-[0] leading-[normal] mb-4">Fiche Produit</h1>
           <div className="font-medium text-white/80 text-sm md:text-base tracking-[0] leading-[normal]">
@@ -310,11 +310,11 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
             {/* Price */}
             <div className="flex items-baseline gap-3">
               {!!(product.original_price && product.discounted_price && product.discounted_price < product.original_price) && (
-                <span className="line-through decoration-[#1D8EE6]/60 decoration-[1.5px] text-slate-400 text-lg font-medium">
+                <span className="line-through decoration-[#C86D85]/60 decoration-[1.5px] text-slate-400 text-lg font-medium">
                   {Number(product.original_price).toFixed(3)} TND
                 </span>
               )}
-              <span className="text-[#1D8EE6] text-3xl font-extrabold">
+              <span className="text-[#C86D85] text-3xl font-extrabold">
                 {Number(product.discounted_price && product.discounted_price > 0 ? product.discounted_price : product.original_price).toFixed(3)} TND
               </span>
             </div>
@@ -348,7 +348,7 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
                   onClick={() => {
                     if (product) {
                       const stockVal = product.form !== null && product.form !== undefined && product.form !== "" ? Number(product.form) : null;
-                      const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+                      const maxOrderable = stockVal !== null ? stockVal : null;
                       if (maxOrderable !== null && selectedQuantity + 1 > maxOrderable) {
                         toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
                           style: { borderRadius: '10px', background: '#333', color: '#fff' }
@@ -369,7 +369,7 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
                   addToCart(product, selectedQuantity);
                   setSelectedQuantity(1); // reset after adding
                 }}
-                className="flex items-center gap-2 bg-[#1D8EE6] hover:bg-blue-600 text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md"
+                className="flex items-center gap-2 bg-[#C86D85] hover:bg-[#C86D85] text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md"
               >
                 <ShoppingBag className="w-4 h-4" />
                 AJOUTER AU PANIER
@@ -380,7 +380,7 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
             {/* Trust badges */}
             <div className="grid grid-cols-2 gap-3 pt-4">
               {[
-                { icon: Truck, title: "Livraison rapide", desc: "Partout en Tunisie", color: "#1D8EE6", bg: "#EBF5FF" },
+                { icon: Truck, title: "Livraison rapide", desc: "Partout en Tunisie", color: "#C86D85", bg: "#EBF5FF" },
                 { icon: ShieldCheck, title: "Produits authentiques", desc: "Garantie d'origine", color: "#10b981", bg: "#ecfdf5" },
                 { icon: Lock, title: "Procéder au paiement", desc: "100% protégé", color: "#f59e0b", bg: "#fffbeb" },
                 { icon: RotateCcw, title: "Retours faciles", desc: "Sous 14 jours", color: "#8b5cf6", bg: "#f5f3ff" },
@@ -415,7 +415,7 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
                     to={`/detailsprod/${prod.id}`}
                     className="block group"
                   >
-                    <Card className="bg-white rounded-2xl border border-slate-100 hover:border-[#1D8EE6]/25 hover:shadow-md transition-all duration-300 overflow-hidden">
+                    <Card className="bg-white rounded-2xl border border-slate-100 hover:border-[#C86D85]/25 hover:shadow-md transition-all duration-300 overflow-hidden">
                       <CardContent className="p-4 flex flex-col">
                         <div className="bg-slate-50/50 rounded-xl mb-3 flex items-center justify-center h-36 overflow-hidden p-2">
                           {prod.image_path ? (
@@ -431,16 +431,16 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
                             </div>
                           )}
                         </div>
-                        <h3 className="font-semibold text-slate-700 text-xs leading-snug mb-2 line-clamp-2 group-hover:text-[#1D8EE6] transition-colors">
+                        <h3 className="font-semibold text-slate-700 text-xs leading-snug mb-2 line-clamp-2 group-hover:text-[#C86D85] transition-colors">
                           {prod.name}
                         </h3>
                         <div className="flex items-center gap-1.5 mt-auto mb-2">
                           {prod.original_price && prod.discounted_price && prod.discounted_price < prod.original_price && (
-                            <span className="font-medium text-slate-400 text-[10px] line-through decoration-[#1D8EE6]/60 decoration-[1.5px]">
+                            <span className="font-medium text-slate-400 text-[10px] line-through decoration-[#C86D85]/60 decoration-[1.5px]">
                               {Number(prod.original_price).toFixed(3)} TND
                             </span>
                           )}
-                          <span className="font-extrabold text-[#1D8EE6] text-sm">
+                          <span className="font-extrabold text-[#C86D85] text-sm">
                             {Number(prod.discounted_price && prod.discounted_price > 0 ? prod.discounted_price : prod.original_price).toFixed(3)} TND
                           </span>
                         </div>
@@ -448,17 +448,17 @@ if (loading) return   <div className="flex flex-col items-center justify-center 
                           <div className="flex items-center bg-slate-50 border border-slate-200/60 rounded-lg p-0.5 shadow-sm">
                             <button
                               onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeSimilarQty(prod.id, -1); }}
-                              className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                              className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                             >−</button>
                             <span className="w-6 text-center text-[10px] sm:text-xs font-semibold text-slate-700">{getSimilarQty(prod.id)}</span>
                             <button
                               onClick={(e) => { e.preventDefault(); e.stopPropagation(); changeSimilarQty(prod.id, 1); }}
-                              className="w-5 h-5 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-xs font-bold transition"
+                              className="w-5 h-5 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-xs font-bold transition"
                             >+</button>
                           </div>
                           <button
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToCart(prod, getSimilarQty(prod.id)); }}
-                            className="w-7 h-7 sm:w-8 sm:h-8 bg-[#1D8EE6] text-white rounded-lg flex items-center justify-center hover:opacity-90 active:scale-95 transition"
+                            className="w-7 h-7 sm:w-8 sm:h-8 bg-[#C86D85] text-white rounded-lg flex items-center justify-center hover:opacity-90 active:scale-95 transition"
                           >
                             <ShoppingCartIcon className="w-3.5 h-3.5 text-white" />
                           </button>

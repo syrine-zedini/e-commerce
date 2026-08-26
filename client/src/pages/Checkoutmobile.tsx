@@ -29,7 +29,7 @@ export const CheckoutMobile = (): JSX.Element => {
   const [showOtherCityInput, setShowOtherCityInput] = useState(false);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [confirmedOrderId, setConfirmedOrderId] = useState<string | number | null>(null);
-  const [fraisLivraison, setFraisLivraison] = useState(7.2);
+  const [fraisLivraison, setFraisLivraison] = useState(7);
   const [isLoading, setIsLoading] = useState(false);
   const [isCityDropdownOpen, setIsCityDropdownOpen] = useState(false);
 
@@ -56,7 +56,7 @@ export const CheckoutMobile = (): JSX.Element => {
       }
 
       const stockVal = product.form !== null && product.form !== undefined && product.form !== "" ? Number(product.form) : null;
-      const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+      const maxOrderable = stockVal !== null ? stockVal : null;
       if (maxOrderable !== null && item.quantity + 1 > maxOrderable) {
         toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
           style: { borderRadius: '10px', background: '#333', color: '#fff' }
@@ -94,7 +94,7 @@ export const CheckoutMobile = (): JSX.Element => {
     if (sousTotal >= 69) {
       setFraisLivraison(0);
     } else {
-      setFraisLivraison(7.2);
+      setFraisLivraison(7);
     }
   }, [sousTotal]);
 

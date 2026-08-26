@@ -73,11 +73,11 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
     <div className="w-full max-w-md mx-auto">
       <div className="bg-white rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
-          <div className="w-full max-w-[110px] h-auto mx-auto mb-4 flex justify-center items-center">
+          <div className="w-20 h-20 rounded-full bg-black overflow-hidden mx-auto mb-4 flex justify-center items-center shadow-md">
             <img
-              src="/figmaAssets/logo YJPARA.jpeg"
+              src="/figmaAssets/brand/glow-store-logo.jpeg"
               alt="Logo"
-              className="w-full h-auto object-contain"
+              className="w-full h-full object-cover scale-125"
             />
           </div>
           <p className="text-gray-600 mt-2">Connectez-vous à votre compte</p>
@@ -92,7 +92,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
                 placeholder="Entrez votre email"
                 required
               />
@@ -107,7 +107,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D8EE6] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C86D85] focus:border-transparent transition-all"
                 placeholder="Entrez votre mot de passe"
                 required
               />
@@ -130,7 +130,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-[#1D8EE6] to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-[#1D8EE6] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(29,142,230,0.3)]"
+            className="w-full bg-gradient-to-r from-[#C86D85] to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-[#C86D85] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(216,138,158,0.3)]"
           >
             {isLoading ? 'Connexion...' : 'Sign In'}
           </button>
@@ -140,7 +140,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
               <button
                 type="button"
                 onClick={onForgotPassword}
-                className="text-sm text-[#1D8EE6] hover:underline"
+                className="text-sm text-[#C86D85] hover:underline"
               >
                 Mot de passe oublié ?
               </button>

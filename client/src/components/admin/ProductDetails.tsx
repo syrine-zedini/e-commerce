@@ -144,7 +144,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ id }) => {
   {product.discounted_price &&
     product.original_price &&
     product.discounted_price < product.original_price && (
-      <p className="text-gray-400 line-through decoration-[#1D8EE6]/60 decoration-[1.5px] text-lg">
+      <p className="text-gray-400 line-through decoration-[#C86D85]/60 decoration-[1.5px] text-lg">
         {product.original_price} DT
       </p>
     )}

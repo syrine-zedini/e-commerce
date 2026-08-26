@@ -21,7 +21,6 @@ import { registerAdminAuthRoutes } from "./routes/adminAuth";
 import { registerFileStorageRoutes } from "./routes/fileStorage";
 import { registerStockRoutes } from "./routes/stock";
 import { registerImgProxyRoutes } from "./routes/imgProxy";
-import { registerFirstDeliveryRoutes } from "./routes/firstDelivery";
 
 loadDotEnvFiles();
 
@@ -85,7 +84,6 @@ registerAdminAuthRoutes(app);
 registerFileStorageRoutes(app);
 registerStockRoutes(app);
 registerImgProxyRoutes(app);
-registerFirstDeliveryRoutes(app);
 
 // -----------------------------
 // Server start
@@ -106,14 +104,14 @@ registerFirstDeliveryRoutes(app);
     serveStatic(app);
   }
 
-  const port = 3333;
+  const port = Number(process.env.PORT) || 3333;
   server.listen(
     {
       port,
       host: "0.0.0.0",
     },
     () => {
-      log(`🚀 Server running on http://localhost:${port}`);
+      log(`🚀 Server running on port ${port}`);
     }
   );
 })();

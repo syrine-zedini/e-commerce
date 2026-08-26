@@ -2,11 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { convertImageUrl, onImgError } from "@/lib/imageUtils";
 import ReactDOM from "react-dom";
-import AnnouncementBar from "./AnnouncementBar";
 import { Link, useLocation } from "wouter";
 import { apiGet, fetchAllProducts } from "@/lib/api";
-import { FaFacebookF, FaInstagram } from "react-icons/fa";
-import { X, Home, Info, ShoppingBag, Phone, ChevronRight } from "lucide-react";
+import { X, Info, ShoppingBag, Phone, ChevronRight } from "lucide-react";
 import { useCart } from "@/contexts/CartProvider";
 import toast from "react-hot-toast";
 
@@ -35,7 +33,7 @@ useEffect(() => {
   const fetchProducts = async () => {
     let allProducts: any[] = [];
     try {
-      allProducts = await fetchAllProducts("/api/products?activeOnly=1&inStockOnly=1&withPriceOnly=1&tvaOnly=1");
+      allProducts = await fetchAllProducts("/api/products?activeOnly=1&inStockOnly=1&withPriceOnly=1");
     } catch (error: any) {
       console.error("Error fetching products in search MobileHeader:", error.message);
     }
@@ -117,7 +115,7 @@ useEffect(() => {
       ? Number(product.form)
       : null;
 
-    const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+    const maxOrderable = stockVal !== null ? stockVal : null;
     if (maxOrderable !== null && item.quantity + 1 > maxOrderable) {
       toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
         style: { borderRadius: "10px", background: "#333", color: "#fff" },
@@ -157,8 +155,6 @@ useEffect(() => {
   return (
     <>
     <div className="w-full bg-white/90 backdrop-blur-xl sticky top-0 z-50 shadow-sm border-b border-slate-100">
-      <AnnouncementBar />
-
       {menuOpen && ReactDOM.createPortal(
         <div style={{ position: 'fixed', inset: 0, zIndex: 99999, display: 'flex' }}>
           {/* Dark overlay */}
@@ -197,12 +193,21 @@ useEffect(() => {
               padding: '20px 20px 16px',
               borderBottom: '1px solid #f1f5f9',
             }}>
-              <img 
-                style={{ width: '95px', height: 'auto', objectFit: 'contain' }} 
-                alt="YJ PARA logo" 
-                src="/figmaAssets/logo YJPARA.jpeg" 
-              />
-              <button 
+              <div style={{
+                width: '48px', height: '48px',
+                borderRadius: '50%',
+                background: '#000',
+                overflow: 'hidden',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              }}>
+                <img
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(1.25)' }}
+                  alt="Glow Store logo"
+                  src="/figmaAssets/brand/glow-store-logo.jpeg"
+                />
+              </div>
+              <button
                 style={{
                   width: '34px', height: '34px',
                   borderRadius: '50%',
@@ -220,32 +225,6 @@ useEffect(() => {
 
             {/* Navigation Links */}
             <nav style={{ flex: 1, padding: '12px 12px' }}>
-              {/* Home */}
-              <Link
-                to="/"
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '13px 14px',
-                  borderRadius: '14px',
-                  marginBottom: '4px',
-                  background: location === '/' ? 'rgba(29,142,230,0.09)' : 'transparent',
-                  color: location === '/' ? '#1D8EE6' : '#334155',
-                  fontWeight: 600,
-                  fontSize: '14px',
-                  textDecoration: 'none',
-                  transition: 'background 0.15s',
-                }}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Home size={18} style={{ opacity: 0.8 }} />
-                  Accueil
-                </span>
-                <ChevronRight size={15} style={{ opacity: 0.4 }} />
-              </Link>
-
               {/* Dynamic links */}
               {navLinks.map((link, idx) => {
                 const isActive = location === link.href;
@@ -266,8 +245,8 @@ useEffect(() => {
                       padding: '13px 14px',
                       borderRadius: '14px',
                       marginBottom: '4px',
-                      background: isActive ? 'rgba(29,142,230,0.09)' : 'transparent',
-                      color: isActive ? '#1D8EE6' : '#334155',
+                      background: isActive ? 'rgba(216, 138, 158,0.12)' : 'transparent',
+                      color: isActive ? '#C86D85' : '#334155',
                       fontWeight: 600,
                       fontSize: '14px',
                       textDecoration: 'none',
@@ -292,36 +271,8 @@ useEffect(() => {
               alignItems: 'center',
               gap: '12px',
             }}>
-              <a 
-                href="https://www.facebook.com/profile.php?id=61591004090475" 
-                target="_blank" 
-                rel="noreferrer"
-                style={{
-                  width: '36px', height: '36px',
-                  borderRadius: '50%',
-                  background: '#f0f7ff',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#1D8EE6',
-                }}
-              >
-                <FaFacebookF size={14} />
-              </a>
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
-                rel="noreferrer"
-                style={{
-                  width: '36px', height: '36px',
-                  borderRadius: '50%',
-                  background: '#f0f7ff',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#1D8EE6',
-                }}
-              >
-                <FaInstagram size={14} />
-              </a>
               <span style={{ fontSize: '10px', color: '#94a3b8', marginLeft: '4px', lineHeight: '1.4' }}>
-                YJ PARA COPYRIGHT © 2026<br />
+                COPYRIGHT © 2026<br />
                 <span style={{ fontSize: '8px' }}>powered by GenZ builders</span>
               </span>
             </div>
@@ -370,7 +321,9 @@ useEffect(() => {
 
       <div className="flex items-center justify-between px-3 py-3">
         <Link href="/">
-          <img className="w-[90px] h-auto object-contain" alt="YJ PARA logo" src="/figmaAssets/logo YJPARA.jpeg" />
+          <div className="h-11 w-11 rounded-full bg-black overflow-hidden flex items-center justify-center shadow-sm">
+            <img className="h-full w-full object-cover scale-125" alt="Glow Store logo" src="/figmaAssets/brand/glow-store-logo.jpeg" />
+          </div>
         </Link>
         <div className="flex items-center gap-2">
             {/* Cart icon + dropdown popup */}
@@ -383,7 +336,7 @@ useEffect(() => {
                   <img className="w-4 h-[13px]" alt="Cart" src="/figmaAssets/homem/vector.svg" />
                 </div>
                 {cart.length > 0 && (
-                  <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#1D8EE6] shadow-sm ring-2 ring-white rounded-full flex items-center justify-center cursor-pointer animate-pulse-glow">
+                  <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#C86D85] shadow-sm ring-2 ring-white rounded-full flex items-center justify-center cursor-pointer animate-pulse-glow">
                     <span className="text-white text-[10px] font-bold">{cart.length}</span>
                   </div>
                 )}
@@ -407,8 +360,8 @@ useEffect(() => {
                       zIndex: 9998,
                       background: '#ffffff',
                       borderRadius: '20px',
-                      boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
-                      border: '1px solid #f1f5f9',
+                      boxShadow: '0 8px 40px rgba(216,138,158,0.2)',
+                      border: '1px solid #f8d7df',
                       overflow: 'hidden',
                       maxWidth: '440px',
                       margin: '0 auto',
@@ -418,15 +371,15 @@ useEffect(() => {
 
                   <div className="p-4">
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-3 pb-3 border-b border-slate-100">
+                    <div className="flex justify-between items-center mb-3 pb-3 border-b border-rose-100/60">
                       <h4 className="text-sm font-bold text-slate-800">
                         Mon Panier
                         {cart.length > 0 && (
-                          <span className="ml-2 text-[10px] font-semibold bg-blue-50 text-[#1D8EE6] px-2 py-0.5 rounded-full">{cart.length} article{cart.length > 1 ? 's' : ''}</span>
+                          <span className="ml-2 text-[10px] font-semibold bg-[#FDF0F3] text-[#C86D85] px-2 py-0.5 rounded-full border border-[#F8D7DF]">{cart.length} article{cart.length > 1 ? 's' : ''}</span>
                         )}
                       </h4>
                       <button
-                        className="text-slate-400 hover:text-slate-600 text-base leading-none hover:bg-slate-100 w-6 h-6 rounded-full flex items-center justify-center"
+                        className="text-slate-400 hover:text-slate-600 text-base leading-none hover:bg-rose-50 w-6 h-6 rounded-full flex items-center justify-center"
                         onClick={() => setIsCartOpen(false)}
                       >✕</button>
                     </div>
@@ -435,7 +388,7 @@ useEffect(() => {
                       <>
                         <ul className="space-y-2 max-h-[220px] overflow-y-auto mb-3">
                           {cart.map((item) => (
-                            <li key={item.id} className="flex items-center gap-2.5 p-2 bg-slate-50 rounded-xl border border-slate-100">
+                            <li key={item.id} className="flex items-center gap-2.5 p-2 bg-rose-50/40 rounded-xl border border-rose-100/50">
                               <img
                                 src={convertImageUrl(item.image_path || item.image || item.imageUrl)}
                                 alt={item.name}
@@ -444,8 +397,8 @@ useEffect(() => {
                               />
                               <div className="flex-1 min-w-0">
                                 <p className="text-[11px] font-semibold text-slate-800 line-clamp-1">{item.name}</p>
-                                <p className="text-[11px] font-bold text-[#1D8EE6]">{(parseFloat(String(item.discounted_price ?? 0)) > 0 ? parseFloat(String(item.discounted_price ?? 0)) : parseFloat(String(item.original_price ?? 0)) || 0).toFixed(3)} TND</p>
-                                <div className="flex items-center mt-1 bg-white rounded-lg border border-slate-200 w-fit">
+                                <p className="text-[11px] font-bold text-[#C86D85]">{(parseFloat(String(item.discounted_price ?? 0)) > 0 ? parseFloat(String(item.discounted_price ?? 0)) : parseFloat(String(item.original_price ?? 0)) || 0).toFixed(3)} TND</p>
+                                <div className="flex items-center mt-1 bg-white rounded-lg border border-rose-100 w-fit">
                                   <button onClick={() => decrementQuantity(String(item.id))} className="w-5 h-5 flex items-center justify-center text-slate-500 text-xs rounded-l-lg">−</button>
                                   <span className="text-[10px] font-medium w-5 text-center">{item.quantity}</span>
                                   <button onClick={() => incrementQuantity(String(item.id))} className="w-5 h-5 flex items-center justify-center text-slate-500 text-xs rounded-r-lg">+</button>
@@ -466,31 +419,31 @@ useEffect(() => {
                             <div className="mb-3 px-1">
                               {remaining > 0 ? (
                                 <p className="text-[10px] text-slate-600 mb-1.5">
-                                  Ajoutez <span className="font-bold text-[#1D8EE6]">{remaining.toFixed(3)} TND</span> et bénéficiez de la <span className="font-bold">livraison gratuite</span> !
+                                  Ajoutez <span className="font-bold text-[#C86D85]">{remaining.toFixed(3)} TND</span> et bénéficiez de la <span className="font-bold">livraison gratuite</span> !
                                 </p>
                               ) : (
-                                <p className="text-[10px] font-semibold text-green-600 mb-1.5">Votre commande est éligible pour la livraison gratuite 🎉</p>
+                                <p className="text-[10px] font-semibold text-emerald-600 mb-1.5">Votre commande est éligible pour la livraison gratuite 🎉</p>
                               )}
-                              <div className="w-full bg-slate-100 rounded-full h-1.5">
+                              <div className="w-full bg-rose-100/60 rounded-full h-1.5">
                                 <div
                                   className="h-1.5 rounded-full transition-all duration-500"
-                                  style={{ width: `${progress}%`, backgroundColor: remaining > 0 ? '#1D8EE6' : '#22c55e' }}
+                                  style={{ width: `${progress}%`, backgroundColor: remaining > 0 ? '#C86D85' : '#22c55e' }}
                                 />
                               </div>
                             </div>
                           );
                         })()}
 
-                        <div className="border-t border-slate-100 pt-3">
+                        <div className="border-t border-rose-100/60 pt-3">
                           <div className="flex justify-between items-center mb-1">
                             <span className="text-xs text-slate-500 font-medium">Total</span>
-                            <span className="text-base font-bold text-[#1D8EE6]">{total.toFixed(3)} TND</span>
+                            <span className="text-base font-bold text-[#C86D85]">{total.toFixed(3)} TND</span>
                           </div>
                           <p className="text-right text-[9px] text-slate-400 mb-2.5">
                             dont <span className="font-semibold">{cart.reduce((sum, item) => { const priceTtc = ((item.discounted_price > 0 ? item.discounted_price : item.original_price) || item.price || 0) * item.quantity; const tvaRate = item.tva !== undefined && item.tva !== null ? parseFloat(String(item.tva)) : 0; return sum + (tvaRate > 0 ? priceTtc * tvaRate / (100 + tvaRate) : 0); }, 0).toFixed(3)} TND</span> TVA
                           </p>
                           <Link to="/checkout" onClick={() => setIsCartOpen(false)}>
-                            <button className="w-full bg-[#1D8EE6] hover:bg-blue-600 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-colors">
+                            <button className="w-full bg-gradient-to-r from-[#D88A9E] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition-colors">
                               Procéder au paiement →
                             </button>
                           </Link>
@@ -498,7 +451,7 @@ useEffect(() => {
                       </>
                     ) : (
                       <div className="py-6 flex flex-col items-center">
-                        <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mb-2 text-2xl">🛒</div>
+                        <div className="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center mb-2 text-2xl">🛒</div>
                         <p className="text-slate-400 text-xs font-medium">Ton panier est vide</p>
                       </div>
                     )}
@@ -512,7 +465,7 @@ useEffect(() => {
             {/* Cart Total Price — cliquable pour ouvrir le panier */}
             <button
               onClick={(e) => { e.stopPropagation(); setIsCartOpen(!isCartOpen); }}
-              className="text-[#1D8EE6] font-extrabold text-[13px] whitespace-nowrap shrink-0 ml-1 active:scale-95 transition-all"
+              className="text-[#C86D85] font-extrabold text-[13px] whitespace-nowrap shrink-0 ml-1 active:scale-95 transition-all"
             >
               {total.toFixed(3)} TND
             </button>

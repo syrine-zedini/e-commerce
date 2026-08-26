@@ -5,12 +5,11 @@ import { apiGet, fetchAllProducts } from "@/lib/api";
 import { FooterMobile } from "@/components/ui/FooterMobile";
 import { MobileHeader } from "@/components/MobileHeader";
 import { Link } from "wouter";
-import { ChevronLeft, ChevronRight, ShoppingCartIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShoppingCartIcon, Sparkles } from "lucide-react";
 import { convertImageUrl, onImgError } from "@/lib/imageUtils";
 import { toast } from "react-hot-toast";
 import { SERVICE_FEATURES, HEADER_LINKS } from "@/lib/pageData";
 import { isProductAvailable, showToast } from "@/lib/productUtils";
-import { useBrandLogos } from "@/hooks/useBrandLogos";
 import { useActivePromotion } from "@/hooks/useActivePromotion";
 import { useGalleryImages } from "@/hooks/useGalleryImages";
 import { useQuantityManager } from "@/hooks/useQuantityManager";
@@ -22,9 +21,6 @@ interface Conseil {
 }
 export const HomeMobile = (): JSX.Element => {
 
-
-  const brandLogos = useBrandLogos();
-  const brands = brandLogos;
 
   const services = SERVICE_FEATURES;
 
@@ -270,7 +266,9 @@ const fetchSpecialOfferProducts = async () => {
 
 
 
-  const images = useGalleryImages();
+  const galleryImages = useGalleryImages();
+  const usingFallbackSlides = galleryImages.length === 0;
+  const slideCount = usingFallbackSlides ? 1 : galleryImages.length;
 
   // 👇 Fetch categories
   useEffect(() => {
@@ -291,7 +289,7 @@ const addToCart = (product: any, qty: number = 1) => {
   const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
   const exists = savedCart.find((item: any) => item.id === product.id);
   const stockVal = product.form != null && product.form !== "" ? Number(product.form) : null;
-  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal - 3 : null;
+  const maxOrderable = stockVal !== null && !isNaN(stockVal) ? stockVal : null;
   const currentInCart = exists ? (exists.quantity || 1) : 0;
   if (maxOrderable !== null && currentInCart + qty > maxOrderable) {
     const remaining = Math.max(0, maxOrderable - currentInCart);
@@ -316,28 +314,31 @@ const addToCart = (product: any, qty: number = 1) => {
 
   // 👇 Changer l'image toutes les 5s (seulement quand images chargées)
   useEffect(() => {
-    if (images.length === 0) return;
     setCurrent(0);
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
+      setCurrent((prev) => (prev + 1) % slideCount);
     }, 5000);
     return () => clearInterval(interval);
-  }, [images]);
+  }, [slideCount]);
 
   if (loading) return <p className="text-center py-10">Chargement...</p>;
 
   return (
-    <div className="bg-white grid justify-items-center [align-items:start] w-screen">
-      <div className="bg-white overflow-hidden w-full relative">
+    <div className="bg-gradient-to-b from-[#FFF8F8] via-[#FDF2F4] to-[#FAF0F2] grid justify-items-center [align-items:start] w-screen">
+      <div className="bg-transparent overflow-hidden w-full relative">
 
         <MobileHeader navLinks={navLinks} />
 
         {/* Hero Image - Carrousel */}
         <div className="relative w-full h-[280px] overflow-hidden group">
-          {images.length === 0 ? (
-            <div className="w-full h-full bg-slate-50 animate-pulse" />
+          {usingFallbackSlides ? (
+            <img
+              src="/figmaAssets/brand/banners/cosmetic-2.jpg"
+              alt="Glow Store"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           ) : (
-            images.map((src, index) => (
+            galleryImages.map((src, index) => (
               <img
                 key={src}
                 src={src}
@@ -351,9 +352,9 @@ const addToCart = (product: any, qty: number = 1) => {
               />
             ))
           )}
-          {images.length > 1 && (
+          {slideCount > 1 && (
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2" style={{ zIndex: 10 }}>
-              {images.map((_, index) => (
+              {Array.from({ length: slideCount }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrent(index)}
@@ -366,17 +367,17 @@ const addToCart = (product: any, qty: number = 1) => {
           )}
 
           {/* Flèches de navigation */}
-          {images.length > 1 && (
+          {slideCount > 1 && (
             <>
               <button
-                onClick={() => setCurrent((prev) => (prev - 1 + images.length) % images.length)}
+                onClick={() => setCurrent((prev) => (prev - 1 + slideCount) % slideCount)}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/30 text-white backdrop-blur-sm border border-white/10 shadow-md active:scale-95 transition-all duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
                 aria-label="Slide précédent"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
-                onClick={() => setCurrent((prev) => (prev + 1) % images.length)}
+                onClick={() => setCurrent((prev) => (prev + 1) % slideCount)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/30 text-white backdrop-blur-sm border border-white/10 shadow-md active:scale-95 transition-all duration-300 flex items-center justify-center focus:outline-none cursor-pointer"
                 aria-label="Slide suivant"
               >
@@ -387,7 +388,7 @@ const addToCart = (product: any, qty: number = 1) => {
         </div>
 
         {/* Deals Section (Pharmaceutical Theme) */}
-        <section id="promotions" className="px-3 py-6 mt-4 relative overflow-hidden bg-white border-y border-[#1D8EE6]/10">
+        <section id="promotions" className="px-3 py-6 mt-4 relative overflow-hidden bg-gradient-to-br from-[#FFF7ED] via-[#FDF1F0] to-[#FBEAF1] border-y border-[#D88A9E]/15">
           
           {/* Animated Pharmaceutical Background Elements */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -395,45 +396,45 @@ const addToCart = (product: any, qty: number = 1) => {
             <div 
               className="absolute inset-0" 
               style={{ 
-                backgroundImage: 'radial-gradient(#1D8EE6 1.5px, transparent 1.5px)', 
+                backgroundImage: 'radial-gradient(#D88A9E 1.5px, transparent 1.5px)', 
                 backgroundSize: '30px 30px', 
-                opacity: 0.06 
+                opacity: 0.08 
               }} 
             />
 
             {/* Abstract glowing clinical shapes */}
-            <div className="absolute -top-16 -right-16 w-64 h-64 bg-blue-100/40 rounded-full blur-[50px] animate-[pulse_8s_ease-in-out_infinite]" />
-            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-teal-50/60 rounded-full blur-[50px] animate-[pulse_10s_ease-in-out_infinite]" />
+            <div className="absolute -top-16 -right-16 w-64 h-64 bg-rose-200/30 rounded-full blur-[50px] animate-[pulse_8s_ease-in-out_infinite]" />
+            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-pink-100/40 rounded-full blur-[50px] animate-[pulse_10s_ease-in-out_infinite]" />
           </div>
 
           <div className="relative z-10">
             <div className="mb-5 flex flex-col items-center text-center">
-              <span className="text-[9px] font-bold text-[#1D8EE6] tracking-[0.2em] uppercase mb-1.5 flex items-center gap-1.5">
+              <span className="text-[9px] font-bold text-[#C86D85] tracking-[0.2em] uppercase mb-1.5 flex items-center gap-1.5 bg-[#FDF0F3] px-2 py-0.5 rounded-md border border-[#F8D7DF]">
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#1D8EE6]" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#C86D85]" />
                 </span>
                 OFFRE LIMITÉE
               </span>
               <h2 className="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-800 mb-1.5">
                 Ventes Flash
               </h2>
-              <div className="w-10 h-[3px] bg-gradient-to-r from-[#1D8EE6] to-blue-300 rounded-full mb-2" />
+              <div className="w-10 h-[3px] bg-gradient-to-r from-[#D88A9E] to-rose-300 rounded-full mb-2" />
             </div>
 
             {/* Fresh Light Countdown Banner Mobile */}
-            <div className="mb-5 mx-1 bg-white rounded-2xl px-4 py-3 shadow-[0_8px_24px_rgba(29,142,230,0.15)] border border-[#1D8EE6]/10 relative overflow-hidden">
+            <div className="mb-5 mx-1 bg-white rounded-2xl px-4 py-3 shadow-[0_8px_24px_rgba(216,138,158,0.12)] border border-[#F8D7DF]/60 relative overflow-hidden">
               
               {/* Animated glowing top bar */}
               <div className="absolute top-0 left-0 right-0 h-[4px] overflow-hidden rounded-t-2xl">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1D8EE6] via-teal-300 via-purple-400 to-[#1D8EE6] bg-[length:300%_auto] animate-gradient-x" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#D88A9E] via-rose-300 via-pink-400 to-[#D88A9E] bg-[length:300%_auto] animate-gradient-x" />
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-shimmer" />
               </div>
 
               {/* Label */}
               <div className="flex items-center gap-2 mb-3 pt-1">
-                <div className="w-7 h-7 rounded-lg bg-[#EEF7FF] flex items-center justify-center animate-[pulse_3s_ease-in-out_infinite]">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#1D8EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <div className="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center animate-[pulse_3s_ease-in-out_infinite]">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#C86D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -447,33 +448,33 @@ const addToCart = (product: any, qty: number = 1) => {
               <div className="flex items-end gap-1.5">
                 {/* Days */}
                 <div className="flex flex-col items-center flex-1 group/card">
-                  <div className="relative w-full h-14 bg-gradient-to-b from-[#EAF4FF] to-[#F8FBFF] rounded-xl flex items-center justify-center border border-[#1D8EE6]/15 shadow-[0_4px_10px_rgba(29,142,230,0.1)] overflow-hidden transition-all duration-200 active:scale-95">
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#1D8EE6] to-teal-400" />
-                    <span className="font-mono font-black text-xl text-[#1D8EE6] tabular-nums">{String(timeLeft.days).padStart(2, '0')}</span>
+                  <div className="relative w-full h-14 bg-gradient-to-b from-rose-50/60 to-white rounded-xl flex items-center justify-center border border-rose-100 shadow-[0_4px_10px_rgba(216,138,158,0.1)] overflow-hidden transition-all duration-200 active:scale-95">
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#D88A9E] to-rose-400" />
+                    <span className="font-mono font-black text-xl text-[#C86D85] tabular-nums">{String(timeLeft.days).padStart(2, '0')}</span>
                   </div>
                   <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Jours</span>
                 </div>
                 <div className="flex flex-col gap-1 mb-6">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#1D8EE6]/30 animate-pulse" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#1D8EE6]/30 animate-pulse" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D88A9E]/40 animate-pulse" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D88A9E]/40 animate-pulse" />
                 </div>
                 {/* Hours */}
                 <div className="flex flex-col items-center flex-1 group/card">
-                  <div className="relative w-full h-14 bg-gradient-to-b from-[#EAF4FF] to-[#F8FBFF] rounded-xl flex items-center justify-center border border-[#1D8EE6]/15 shadow-[0_4px_10px_rgba(29,142,230,0.1)] overflow-hidden transition-all duration-200 active:scale-95">
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#1D8EE6] to-teal-400" />
-                    <span className="font-mono font-black text-xl text-[#1D8EE6] tabular-nums">{String(timeLeft.hours).padStart(2, '0')}</span>
+                  <div className="relative w-full h-14 bg-gradient-to-b from-rose-50/60 to-white rounded-xl flex items-center justify-center border border-rose-100 shadow-[0_4px_10px_rgba(216,138,158,0.1)] overflow-hidden transition-all duration-200 active:scale-95">
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#D88A9E] to-rose-400" />
+                    <span className="font-mono font-black text-xl text-[#C86D85] tabular-nums">{String(timeLeft.hours).padStart(2, '0')}</span>
                   </div>
                   <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Hrs</span>
                 </div>
                 <div className="flex flex-col gap-1 mb-6">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#1D8EE6]/30 animate-pulse" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#1D8EE6]/30 animate-pulse" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D88A9E]/40 animate-pulse" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D88A9E]/40 animate-pulse" />
                 </div>
                 {/* Minutes */}
                 <div className="flex flex-col items-center flex-1 group/card">
-                  <div className="relative w-full h-14 bg-gradient-to-b from-[#EAF4FF] to-[#F8FBFF] rounded-xl flex items-center justify-center border border-[#1D8EE6]/15 shadow-[0_4px_10px_rgba(29,142,230,0.1)] overflow-hidden transition-all duration-200 active:scale-95">
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#1D8EE6] to-teal-400" />
-                    <span className="font-mono font-black text-xl text-[#1D8EE6] tabular-nums">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                  <div className="relative w-full h-14 bg-gradient-to-b from-rose-50/60 to-white rounded-xl flex items-center justify-center border border-rose-100 shadow-[0_4px_10px_rgba(216,138,158,0.1)] overflow-hidden transition-all duration-200 active:scale-95">
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#D88A9E] to-rose-400" />
+                    <span className="font-mono font-black text-xl text-[#C86D85] tabular-nums">{String(timeLeft.minutes).padStart(2, '0')}</span>
                   </div>
                   <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Min</span>
                 </div>
@@ -484,7 +485,7 @@ const addToCart = (product: any, qty: number = 1) => {
                 {/* Seconds */}
                 <div className="flex flex-col items-center flex-1">
                   <div className="relative w-full h-14 bg-gradient-to-b from-rose-50 to-white rounded-xl flex items-center justify-center border border-rose-200/60 shadow-[0_4px_12px_rgba(244,63,94,0.15)] overflow-hidden">
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-rose-400 to-orange-400" />
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-rose-400 to-pink-400" />
                     <span className="font-mono font-black text-xl text-rose-500 tabular-nums">{String(timeLeft.seconds).padStart(2, '0')}</span>
                   </div>
                   <span className="text-[8px] font-bold text-rose-400 uppercase tracking-widest mt-1">Sec</span>
@@ -506,19 +507,19 @@ const addToCart = (product: any, qty: number = 1) => {
               return (
                 <div key={product.id}>
                   <Link to={`/detailsprod/${product.id}`} className="block group h-full">
-                    <Card className="bg-white rounded-xl border border-slate-200 hover:border-[#1D8EE6] shadow-sm hover:shadow-[0_8px_30px_rgba(29,142,230,0.12)] transition-all h-full active:scale-95 overflow-hidden flex flex-col">
+                    <Card className="bg-white rounded-xl border border-rose-100/70 hover:border-[#D88A9E] shadow-sm hover:shadow-[0_8px_30px_rgba(216,138,158,0.15)] transition-all h-full active:scale-95 overflow-hidden flex flex-col">
                       
                       {/* Image Zone */}
-                      <div className="relative h-36 bg-[#F8FAFC] p-3 flex items-center justify-center overflow-hidden border-b border-slate-100">
+                      <div className="relative h-36 bg-gradient-to-b from-[#FFF5F6] to-white p-3 flex items-center justify-center overflow-hidden border-b border-rose-100/60">
                         {/* Badges */}
                         <div className="absolute top-1.5 left-1.5 flex flex-col gap-1 z-10">
                           {discountPct && discountPct > 0 && (
-                            <span className="bg-[#1D8EE6] text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm tracking-wider uppercase">
+                            <span className="bg-[#C86D85] text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm tracking-wider uppercase">
                               -{discountPct}%
                             </span>
                           )}
                           {product.badges.some((b: any) => b.toLowerCase().includes('solde')) && (
-                            <span className="bg-amber-400 text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm tracking-wider uppercase">
+                            <span className="bg-rose-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm tracking-wider uppercase">
                               Soldes
                             </span>
                           )}
@@ -549,22 +550,22 @@ const addToCart = (product: any, qty: number = 1) => {
                           </div>
                         )}
                         
-                        <h3 className="font-semibold text-slate-800 text-[11px] mb-2 line-clamp-2 group-hover:text-[#1D8EE6] transition-colors" style={{minHeight:'2.6em'}}>
+                        <h3 className="font-semibold text-slate-800 text-[11px] mb-2 line-clamp-2 group-hover:text-[#C86D85] transition-colors" style={{minHeight:'2.6em'}}>
                           {product.name}
                         </h3>
                         
-                        <div className="flex items-end justify-between mt-auto pt-2 border-t border-slate-50">
+                        <div className="flex items-end justify-between mt-auto pt-2 border-t border-rose-100/50">
                           <div className="flex flex-col">
                             {product.originalPrice && (
                               <span className="font-medium text-slate-400 text-[9px] line-through leading-none mb-0.5">
                                 {Number(product.originalPrice).toFixed(3)}&nbsp;DT
                               </span>
                             )}
-                            <span className="font-extrabold text-[#1D8EE6] text-[12px] leading-none whitespace-nowrap">
+                            <span className="font-extrabold text-[#C86D85] text-[12px] leading-none whitespace-nowrap">
                               {Number(product.price).toFixed(3)}&nbsp;DT
                             </span>
                           </div>
-                          <div className="w-7 h-7 bg-slate-50 text-slate-600 group-hover:bg-[#1D8EE6] group-hover:text-white rounded-full flex items-center justify-center transition-colors border border-slate-200 group-hover:border-transparent shadow-sm">
+                          <div className="w-7 h-7 bg-rose-50 text-slate-600 group-hover:bg-[#C86D85] group-hover:text-white rounded-full flex items-center justify-center transition-colors border border-rose-100 group-hover:border-transparent shadow-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -584,7 +585,7 @@ const addToCart = (product: any, qty: number = 1) => {
           <div className="mt-4 flex justify-center pb-2">
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[#1D8EE6] text-[#1D8EE6] font-bold text-xs transition-all active:scale-95"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[#D88A9E] text-[#C86D85] bg-white/80 font-bold text-xs shadow-sm hover:shadow transition-all active:scale-95"
             >
               <span>Découvrir les promotions</span>
               <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -596,7 +597,7 @@ const addToCart = (product: any, qty: number = 1) => {
         </section>
 
         {/* Categories Section */}
-        <section className="py-6 px-3 bg-white">
+        <section className="py-6 px-3 bg-transparent">
           <div className="max-w-7xl mx-auto">
             <div
               ref={scrollRef}
@@ -615,7 +616,7 @@ const addToCart = (product: any, qty: number = 1) => {
                   to={`/products?category=${category.id}`}
                   className="flex-shrink-0 text-center cursor-pointer snap-start"
                 >
-                  <div className="w-[72px] h-[72px] rounded-xl overflow-hidden border border-slate-100/80 bg-slate-50 shadow-sm mx-auto flex items-center justify-center">
+                  <div className="w-[72px] h-[72px] rounded-xl overflow-hidden border border-rose-100/80 bg-white shadow-sm mx-auto flex items-center justify-center">
                     {category.image ? (
                       <img
                         className="w-full h-full object-cover scale-[1.2]"
@@ -624,8 +625,8 @@ const addToCart = (product: any, qty: number = 1) => {
                         onError={onImgError}
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-                        <span className="text-lg font-black text-[#1D8EE6] uppercase select-none">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-100">
+                        <span className="text-lg font-black text-[#C86D85] uppercase select-none">
                           {category.name.charAt(0)}
                         </span>
                       </div>
@@ -640,35 +641,39 @@ const addToCart = (product: any, qty: number = 1) => {
           </div>
         </section>
 
-        {/* Full-width Parapharmacy Advertising Banner Section */}
+        {/* Full-width Cosmetic Advertising Banner Section */}
         <section className="w-full my-4 relative overflow-hidden">
-          <Link to="/products" className="block w-full">
-            <img src="/figmaAssets/bande.png" alt="Votre santé et votre beauté au naturel" className="w-full h-48 object-fill" style={{ minHeight: '180px' }} />
+          <Link to="/products" className="block relative h-44 overflow-hidden">
+            <img
+              src="/figmaAssets/brand/banners/cosmetic-1.jpg"
+              alt="Glow Store"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           </Link>
         </section>
 
         {/* Latest Products Section */}
         <section id="derniers-produits" className="px-3 py-6">
           <div className="mb-6">
-            <span className="text-[10px] font-bold text-[#1D8EE6] tracking-widest uppercase mb-1.5 block">SÉLECTION NOUVEAUTÉS</span>
+            <span className="text-[10px] font-bold text-[#C86D85] tracking-widest uppercase mb-1.5 block">SÉLECTION NOUVEAUTÉS</span>
             <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">
               Nos derniers produits
             </h2>
-            <div className="w-8 h-[2.5px] bg-[#1D8EE6] mt-2 rounded-full" />
+            <div className="w-8 h-[2.5px] bg-[#C86D85] mt-2 rounded-full" />
           </div>
 
-          <div className="w-full h-48 mb-6 rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+          <div className="relative w-full h-48 mb-6 rounded-2xl overflow-hidden shadow-sm border border-rose-100">
             <img
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-in-out"
-              alt="Promo banner Vichy"
-              src="/figmaAssets/rectangle-111.svg"
+              src="/figmaAssets/brand/banners/cosmetic-3.jpg"
+              alt="Glow Store"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             {latestProducts.map((product) => (
               <Link key={product.id} to={`/detailsprod/${product.id}`} className="block group">
-                <Card className="bg-white rounded-2xl border border-slate-100/80 hover:border-[#1D8EE6]/20 transition-all duration-300 overflow-hidden h-full flex flex-col">
+                <Card className="bg-white rounded-2xl border border-rose-100/80 hover:border-[#D88A9E]/30 transition-all duration-300 overflow-hidden h-full flex flex-col">
                   <CardContent className="p-2.5 flex flex-col h-full">
                     {/* Badges */}
                     <div className="flex gap-1 mb-1.5 flex-wrap">
@@ -678,7 +683,7 @@ const addToCart = (product: any, qty: number = 1) => {
                           <Badge
                             key={index}
                             className={`h-4 px-1.5 text-[8px] uppercase font-bold tracking-wider rounded-md border-0 shadow-none ${
-                              isPromo ? "bg-rose-50 text-rose-600" : "bg-blue-50 text-[#1D8EE6]"
+                              isPromo ? "bg-rose-50 text-rose-600" : "bg-[#FDF0F3] text-[#C86D85]"
                             }`}
                           >
                             {badge}
@@ -688,7 +693,7 @@ const addToCart = (product: any, qty: number = 1) => {
                     </div>
 
                     {/* Image */}
-                    <div className="w-full h-28 bg-slate-50/50 rounded-xl p-2 flex items-center justify-center overflow-hidden mb-2">
+                    <div className="w-full h-28 bg-gradient-to-b from-[#FFF5F6] to-white rounded-xl p-2 flex items-center justify-center overflow-hidden mb-2">
                       <img
                         className="max-h-full max-w-full object-contain"
                         alt={product.name}
@@ -716,7 +721,7 @@ const addToCart = (product: any, qty: number = 1) => {
                       {product.categories.map((category: any, index: number) => (
                         <span
                           key={index}
-                          className="px-1.5 py-0.5 bg-[#F0F7FF] text-[#1D8EE6] border border-[#1D8EE6]/20 rounded-md text-[8px] font-bold uppercase tracking-widest"
+                          className="px-1.5 py-0.5 bg-[#FDF0F3] text-[#C86D85] border border-[#F8D7DF] rounded-md text-[8px] font-bold uppercase tracking-widest"
                         >
                           {category}
                         </span>
@@ -724,7 +729,7 @@ const addToCart = (product: any, qty: number = 1) => {
                     </div>
 
                     {/* Price */}
-                    <div className="mt-auto pt-2 border-t border-slate-100 flex flex-col">
+                    <div className="mt-auto pt-2 border-t border-rose-100/50 flex flex-col">
                       {product.originalPrice &&
                         product.price &&
                         Number(product.price) < Number(product.originalPrice) && (
@@ -732,16 +737,16 @@ const addToCart = (product: any, qty: number = 1) => {
                             {Number(product.originalPrice).toFixed(3)}&nbsp;DT
                           </span>
                         )}
-                      <span className="font-extrabold text-[#1D8EE6] text-sm leading-none whitespace-nowrap mb-2">
+                      <span className="font-extrabold text-[#C86D85] text-sm leading-none whitespace-nowrap mb-2">
                         {Number(
                           product.price && product.price > 0 ? product.price : product.originalPrice
                         ).toFixed(3)}&nbsp;DT
                       </span>
                       <div className="flex items-center justify-between gap-1 mt-auto">
-                        <div className="flex items-center bg-slate-50 border border-slate-200/60 rounded-lg p-0.5 shadow-sm" onClick={(e) => e.preventDefault()}>
+                        <div className="flex items-center bg-rose-50/40 border border-rose-100 rounded-lg p-0.5 shadow-sm" onClick={(e) => e.preventDefault()}>
                           <button
                             onClick={(e) => { e.preventDefault(); changeQty(product.id, -1); }}
-                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
+                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
                           >−</button>
                           <span className="w-5 text-center text-[9px] font-semibold text-slate-700">{getQty(product.id)}</span>
                           <button
@@ -749,7 +754,7 @@ const addToCart = (product: any, qty: number = 1) => {
                               e.preventDefault();
                               const stockVal = product.form !== null && product.form !== undefined && product.form !== ""
                                 ? Number(product.form) : null;
-                              const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+                              const maxOrderable = stockVal !== null ? stockVal : null;
                               if (maxOrderable !== null && getQty(product.id) + 1 > maxOrderable) {
                                 toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
                                   style: { borderRadius: "10px", background: "#333", color: "#fff" },
@@ -758,12 +763,12 @@ const addToCart = (product: any, qty: number = 1) => {
                               }
                               changeQty(product.id, 1);
                             }}
-                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
+                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
                           >+</button>
                         </div>
                         <button
                           onClick={(e) => { e.preventDefault(); addToCart(product, getQty(product.id)); }}
-                          className="relative flex-1 group/btn h-[24px] bg-gradient-to-r from-[#1D8EE6] to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_2px_6px_rgba(29,142,230,0.15)] overflow-hidden"
+                          className="relative flex-1 group/btn h-[24px] bg-gradient-to-r from-[#D88A9E] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_2px_6px_rgba(216,138,158,0.2)] overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                           <div className="flex items-center gap-0.5 relative z-10">
@@ -782,32 +787,32 @@ const addToCart = (product: any, qty: number = 1) => {
 
         {/* Promotional Banner */}
         <div className="px-3 mb-6">
-          <div className="w-full h-[320px] rounded-2xl overflow-hidden shadow-sm border border-slate-100 bg-slate-50">
+          <div className="relative w-full h-[320px] rounded-2xl overflow-hidden shadow-sm border border-rose-100">
             <img
-              className="w-full h-full object-cover"
-              alt="Promotional Banner"
-              src="/figmaAssets/homem/rectangle-111.svg"
+              src="/figmaAssets/brand/banners/cosmetic-1.jpg"
+              alt="Glow Store"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
         </div>
 
         {/* Best Selling / Top Products Section */}
-        <section id="meilleurs-produits" className="px-3 py-8 bg-white">
+        <section id="meilleurs-produits" className="px-3 py-8 bg-transparent">
           <div className="mb-6">
-            <span className="text-[10px] font-bold text-[#1D8EE6] tracking-widest uppercase mb-1.5 block">SÉLECTION PREMIUM</span>
+            <span className="text-[10px] font-bold text-[#C86D85] tracking-widest uppercase mb-1.5 block">SÉLECTION PREMIUM</span>
             <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">
               Meilleurs produits
             </h2>
-            <div className="w-8 h-[2.5px] bg-[#1D8EE6] mt-2 rounded-full" />
+            <div className="w-8 h-[2.5px] bg-[#C86D85] mt-2 rounded-full" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             {bestSellingProducts.map((product) => (
               <Link key={product.id} to={`/detailsprod/${product.id}`} className="block group">
-                <Card className="bg-white rounded-2xl border border-slate-100/80 hover:border-[#1D8EE6]/20 transition-all duration-300 overflow-hidden h-full flex flex-col">
+                <Card className="bg-white rounded-2xl border border-rose-100/80 hover:border-[#D88A9E]/30 transition-all duration-300 overflow-hidden h-full flex flex-col">
                   <CardContent className="p-2.5 flex flex-col h-full">
                     {/* Image */}
-                    <div className="w-full h-28 bg-slate-50/50 rounded-xl p-2 flex items-center justify-center overflow-hidden mb-2">
+                    <div className="w-full h-28 bg-gradient-to-b from-[#FFF5F6] to-white rounded-xl p-2 flex items-center justify-center overflow-hidden mb-2">
                       <img
                         className="max-h-full max-w-full object-contain"
                         alt={product.name}
@@ -835,7 +840,7 @@ const addToCart = (product: any, qty: number = 1) => {
                       {product.categories.map((category: any, index: number) => (
                         <span
                           key={index}
-                          className="px-1.5 py-0.5 bg-[#F0F7FF] text-[#1D8EE6] border border-[#1D8EE6]/20 rounded-md text-[8px] font-bold uppercase tracking-widest"
+                          className="px-1.5 py-0.5 bg-[#FDF0F3] text-[#C86D85] border border-[#F8D7DF] rounded-md text-[8px] font-bold uppercase tracking-widest"
                         >
                           {category}
                         </span>
@@ -843,7 +848,7 @@ const addToCart = (product: any, qty: number = 1) => {
                     </div>
 
                     {/* Price */}
-                    <div className="mt-auto pt-2 border-t border-slate-100 flex flex-col">
+                    <div className="mt-auto pt-2 border-t border-rose-100/50 flex flex-col">
                       {product.originalPrice &&
                         product.price &&
                         Number(product.price) < Number(product.originalPrice) && (
@@ -851,14 +856,14 @@ const addToCart = (product: any, qty: number = 1) => {
                             {Number(product.originalPrice).toFixed(3)}&nbsp;DT
                           </span>
                         )}
-                      <span className="font-bold text-[#1D8EE6] text-sm whitespace-nowrap mb-2">
+                      <span className="font-bold text-[#C86D85] text-sm whitespace-nowrap mb-2">
                         {Number(product.price && product.price > 0 ? product.price : product.originalPrice).toFixed(3)}&nbsp;DT
                       </span>
                       <div className="flex items-center justify-between gap-1 mt-auto">
-                        <div className="flex items-center bg-slate-50 border border-slate-200/60 rounded-lg p-0.5 shadow-sm" onClick={(e) => e.preventDefault()}>
+                        <div className="flex items-center bg-rose-50/40 border border-rose-100 rounded-lg p-0.5 shadow-sm" onClick={(e) => e.preventDefault()}>
                           <button
                             onClick={(e) => { e.preventDefault(); changeQty(product.id, -1); }}
-                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
+                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
                           >−</button>
                           <span className="w-5 text-center text-[9px] font-semibold text-slate-700">{getQty(product.id)}</span>
                           <button
@@ -866,7 +871,7 @@ const addToCart = (product: any, qty: number = 1) => {
                               e.preventDefault();
                               const stockVal = product.form !== null && product.form !== undefined && product.form !== ""
                                 ? Number(product.form) : null;
-                              const maxOrderable = stockVal !== null ? stockVal - 3 : null;
+                              const maxOrderable = stockVal !== null ? stockVal : null;
                               if (maxOrderable !== null && getQty(product.id) + 1 > maxOrderable) {
                                 toast.error(`Maximum ${maxOrderable} article${maxOrderable > 1 ? 's' : ''} commandable${maxOrderable > 1 ? 's' : ''} pour ce produit.`, {
                                   style: { borderRadius: "10px", background: "#333", color: "#fff" },
@@ -875,12 +880,12 @@ const addToCart = (product: any, qty: number = 1) => {
                               }
                               changeQty(product.id, 1);
                             }}
-                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#1D8EE6] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
+                            className="w-4 h-4 rounded-full text-slate-500 hover:text-[#C86D85] hover:bg-white flex items-center justify-center text-[10px] font-bold transition"
                           >+</button>
                         </div>
                         <button
                           onClick={(e) => { e.preventDefault(); addToCart(product, getQty(product.id)); }}
-                          className="relative flex-1 group/btn h-[24px] bg-gradient-to-r from-[#1D8EE6] to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_2px_6px_rgba(29,142,230,0.15)] overflow-hidden"
+                          className="relative flex-1 group/btn h-[24px] bg-gradient-to-r from-[#D88A9E] to-[#E8A5B8] hover:from-[#C86D85] hover:to-[#D88A9E] rounded-lg flex items-center justify-center transition-all duration-300 shadow-[0_2px_6px_rgba(216,138,158,0.2)] overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                           <div className="flex items-center gap-0.5 relative z-10">
@@ -899,63 +904,44 @@ const addToCart = (product: any, qty: number = 1) => {
 
         {/* Advertisement Banners */}
         <div className="px-3 space-y-4 mb-6">
-          <div className="w-full rounded-2xl overflow-hidden shadow-sm border border-slate-100">
-            <img
-              className="w-full object-cover"
-              alt="Advertisement"
-              src="/figmaAssets/homem/rectangle-88.png"
-            />
+          <div
+            className="relative w-full rounded-2xl overflow-hidden shadow-sm border border-rose-100 flex flex-col items-center justify-center text-center px-6 py-10"
+            style={{ background: "linear-gradient(120deg, #FAD6E3 0%, #E8A5B8 45%, #C86D85 100%)" }}
+          >
+            <h3 className="font-bold text-white text-lg mb-1.5">
+              Nouveautés cosmétiques
+            </h3>
+            <p className="text-white/90 text-xs">
+              Découvrez notre sélection de produits de beauté
+            </p>
           </div>
-          <div className="w-full rounded-2xl overflow-hidden shadow-sm border border-slate-100">
-            <img
-              className="w-full object-cover"
-              alt="Advertisement"
-              src="/figmaAssets/homem/rectangle-143.png"
-            />
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-sm border border-[#F8D7DF]/60 flex flex-col items-center justify-center text-center px-6 py-10 bg-gradient-to-br from-[#FFF7ED] via-[#FDF1F0] to-[#FBEAF1]">
+            <div className="absolute -top-10 -left-10 w-32 h-32 rounded-full bg-[#F3D9E4]/60 blur-2xl" />
+            <div className="absolute -bottom-10 -right-8 w-28 h-28 rounded-full bg-[#FAD6E3]/60 blur-2xl" />
+
+            <div className="relative w-9 h-9 rounded-full bg-white/90 shadow-sm flex items-center justify-center mb-3 border border-rose-100">
+              <Sparkles className="w-4 h-4 text-[#C86D85]" />
+            </div>
+            <h3 className="relative font-['Playfair_Display',serif] italic text-slate-800 text-lg mb-1.5">
+              Une routine beauté sur mesure
+            </h3>
+            <p className="relative text-slate-500 text-xs">
+              Des soins cosmétiques choisis avec soin pour révéler votre éclat naturel
+            </p>
           </div>
         </div>
 
-        {/* Popular Brands Section */}
-        <section className="px-3 py-6 bg-white">
-          <div className="mb-6">
-            <span className="text-[10px] font-bold text-[#1D8EE6] tracking-widest uppercase mb-1.5 block">NOS PARTENAIRES</span>
-            <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">
-              Marques populaires
-            </h2>
-            <div className="w-8 h-[2.5px] bg-[#1D8EE6] mt-2 rounded-full" />
-          </div>
-
-          <div className="w-full overflow-x-auto scrollbar-hide">
-            <div className="flex gap-4 pb-4 w-max">
-              {brands.map((brand, index) => (
-                <Card
-                  key={index}
-                  className="flex-shrink-0 w-44 h-28 bg-white rounded-2xl border border-slate-100 shadow-sm"
-                >
-                  <CardContent className="p-4 flex items-center justify-center h-full">
-                    <img
-                      className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all"
-                      alt="Brand"
-                      src={brand.image}
-                    />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Services Section */}
-        <section className="px-3 py-6 space-y-4 bg-slate-50 border-t border-slate-100">
+        <section className="px-3 py-6 space-y-4 bg-[#FDF5F6]/60 border-t border-rose-100/60">
           {services.map((service, index) => (
             <Link key={index} to={service.link} className="block cursor-pointer">
               <Card
-                className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl border border-rose-100/80 shadow-sm hover:shadow-md transition-shadow"
               >
                 <CardContent className="p-4 flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${service.bgClass}`}>
                     <service.icon
-                      className="w-6 h-6 transition-transform duration-300 group-hover:scale-110"
+                      className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 text-[#C86D85]"
                     />
                   </div>
 

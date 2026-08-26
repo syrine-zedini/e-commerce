@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
-import { GALLERY_FALLBACK_IMAGES } from "@/lib/pageData";
 
-// Shared between Home and Homemobile (identical fetch + fallback logic).
+// Shared between Home and Homemobile (identical fetch logic). Returns only
+// admin-managed images from /api/gallery-images — an empty array means the
+// caller should render its own fallback.
 export function useGalleryImages() {
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchImages = async () => {
-      let data: any[] = [];
       try {
-        data = await apiGet("/api/gallery-images");
+        const data = await apiGet("/api/gallery-images");
+        setImages(data?.map((item: any) => item.image_url) || []);
       } catch {
-        setImages(GALLERY_FALLBACK_IMAGES);
-        return;
+        setImages([]);
       }
-
-      setImages([...GALLERY_FALLBACK_IMAGES, ...(data?.map((item) => item.image_url) || [])]);
     };
 
     fetchImages();
