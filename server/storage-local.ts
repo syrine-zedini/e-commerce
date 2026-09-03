@@ -12,19 +12,27 @@ import { v2 as cloudinary } from "cloudinary";
 //    statically at /uploads/*. Also used in production if Cloudinary is not
 //    configured, but note that on ephemeral hosts those files are wiped on
 //    every restart.
+// Either set CLOUDINARY_URL (the single string Cloudinary hands you:
+// cloudinary://<key>:<secret>@<cloud_name>) or the 3 separate vars below.
 const CLOUDINARY_ENABLED = Boolean(
-  process.env.CLOUDINARY_CLOUD_NAME &&
-  process.env.CLOUDINARY_API_KEY &&
-  process.env.CLOUDINARY_API_SECRET,
+  process.env.CLOUDINARY_URL ||
+  (process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET),
 );
 
 if (CLOUDINARY_ENABLED) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true,
-  });
+  if (process.env.CLOUDINARY_URL) {
+    // The SDK auto-parses CLOUDINARY_URL; just force https delivery.
+    cloudinary.config({ secure: true });
+  } else {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
+  }
 }
 
 // All Cloudinary assets live under this prefix to keep the account tidy.
