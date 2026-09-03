@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { createHttpServer } from "./httpServer";
 import { setupVite, serveStatic, log } from "./vite";
 import fs from "fs";
-import { UPLOADS_ROOT } from "./storage-local";
+import { UPLOADS_ROOT, LEGACY_UPLOADS_DIR, CLOUDINARY_ENABLED } from "./storage-local";
 import { loadDotEnvFiles } from "./loadEnv";
 
 import { registerEmailRoutes } from "./email";
@@ -32,6 +32,12 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
 fs.mkdirSync(UPLOADS_ROOT, { recursive: true });
 app.use("/uploads", express.static(UPLOADS_ROOT));
+// Also serve images committed to the repo (legacy uploads made before the
+// switch to Cloudinary), so old product/category rows keep rendering.
+if (LEGACY_UPLOADS_DIR !== UPLOADS_ROOT && fs.existsSync(LEGACY_UPLOADS_DIR)) {
+  app.use("/uploads", express.static(LEGACY_UPLOADS_DIR));
+}
+log(`🖼️  Image storage: ${CLOUDINARY_ENABLED ? "Cloudinary" : "local disk (" + UPLOADS_ROOT + ")"}`);
 
 // Basic request logger
 app.use((req, res, next) => {

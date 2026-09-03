@@ -14,7 +14,7 @@ export function registerFileStorageRoutes(app: Express) {
     if (folder.includes("://")) {
       return res.status(400).json({ error: "Invalid folder: looks like a URL, not a local storage folder name" });
     }
-    res.json(listFiles(folder));
+    res.json(await listFiles(folder));
   }));
 
   app.post("/api/storage/*", express.json({ limit: "15mb" }), asyncHandler(async (req, res) => {
@@ -23,7 +23,7 @@ export function registerFileStorageRoutes(app: Express) {
     if (!name || !b64) return res.status(400).json({ error: "name and data required" });
     const filename = `${Date.now()}-${name}`;
     const buf = Buffer.from(b64, "base64");
-    const url = saveFile(folder, filename, buf);
+    const url = await saveFile(folder, filename, buf);
     res.json({ name: filename, url });
   }));
 
@@ -31,7 +31,7 @@ export function registerFileStorageRoutes(app: Express) {
     const fullPath = (req.params as any)[0] as string;
     const folder = path.dirname(fullPath).replace(/\\/g, "/");
     const filename = path.basename(fullPath);
-    deleteFile(folder === "." ? "" : folder, filename);
+    await deleteFile(folder === "." ? "" : folder, filename);
     res.json({ success: true });
   }));
 }
