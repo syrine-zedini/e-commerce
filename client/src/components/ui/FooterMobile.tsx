@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Separator } from "./separator";
-import { FaInstagram, FaFacebookF } from "react-icons/fa";
+import { FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
 import { apiGet } from "@/lib/api";
 import { FOOTER_TITLE_LINKS } from "@/lib/pageData";
 
@@ -104,18 +104,41 @@ export const FooterMobile: React.FC<FooterMobileProps> = ({ sections }) => {
           />
         </div>
 
+        <p className="[font-family:'Inter',Helvetica] font-normal text-slate-500 text-xs leading-relaxed mb-2 max-w-[314px]">
+          Welcome to the world of luxury elegance and style.
+        </p>
         <p className="[font-family:'Inter',Helvetica] font-normal text-slate-500 text-xs leading-relaxed mb-8 max-w-[314px]">
-          Une sélection de produits cosmétiques pensée pour révéler votre
-          beauté naturelle et prendre soin de vous au quotidien.
+          Boutique en ligne by nourhen
         </p>
 
         <div className="flex gap-4 mt-8">
-          <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-rose-50 text-[#C86D85] cursor-default">
+          <a
+            href="https://www.facebook.com/share/1EqGqbiNaD/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-rose-50 text-[#C86D85] hover:bg-[#C86D85] hover:text-white transition-colors"
+          >
             <FaFacebookF className="w-4 h-4" />
-          </div>
-          <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-rose-50 text-[#C86D85] cursor-default">
+          </a>
+          <a
+            href="https://www.instagram.com/glow__store.tn"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-rose-50 text-[#C86D85] hover:bg-[#C86D85] hover:text-white transition-colors"
+          >
             <FaInstagram className="w-4 h-4" />
-          </div>
+          </a>
+          <a
+            href="https://www.tiktok.com/@glow__store_"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="TikTok"
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-rose-50 text-[#C86D85] hover:bg-[#C86D85] hover:text-white transition-colors"
+          >
+            <FaTiktok className="w-4 h-4" />
+          </a>
         </div>
       </div>
 

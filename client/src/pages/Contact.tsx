@@ -104,8 +104,8 @@ const headerLinks = HEADER_LINKS;
             </div>
             <div>
               <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Email</p>
-              <a href="mailto:y.jabbes@yjpharmaconsult.com" className="font-semibold text-slate-800 text-base hover:text-[#C86D85] transition-colors">
-                y.jabbes@yjpharmaconsult.com
+              <a href="mailto:Nourhenbouallegui1@gmail.com" className="font-semibold text-slate-800 text-base hover:text-[#C86D85] transition-colors">
+                Nourhenbouallegui1@gmail.com
               </a>
             </div>
           </div>

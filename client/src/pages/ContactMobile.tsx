@@ -67,8 +67,8 @@ export const ContactMobile = (): JSX.Element => {
           <div className="flex flex-col text-xs">
             <span className="font-normal">Adresse email:</span>
             <span className="font-semibold">
-              <a href="mailto:y.jabbes@yjpharmaconsult.com" className="hover:underline">
-                y.jabbes@yjpharmaconsult.com
+              <a href="mailto:Nourhenbouallegui1@gmail.com" className="hover:underline">
+                Nourhenbouallegui1@gmail.com
               </a>
             </span>
           </div>
